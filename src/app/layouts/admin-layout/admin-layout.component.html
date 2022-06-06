@@ -7,7 +7,8 @@
     [mode]="(isHandset$ | async) ? 'over' : 'side'"
     [opened]="(isHandset$ | async) === false"
   >
-    <mat-toolbar>kishka.strybaie</mat-toolbar>
+    <!-- <mat-toolbar>kishka.strybaie</mat-toolbar> -->
+    <mat-toolbar>Кішка стрибає</mat-toolbar>
     <mat-nav-list>
       <li mat-list-item *ngFor="let menuItem of menuItems">
         <a routerLinkActive="active" [routerLink]="[menuItem.path]">
