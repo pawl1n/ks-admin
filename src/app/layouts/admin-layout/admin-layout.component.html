@@ -1,0 +1,41 @@
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav
+    #drawer
+    class="sidenav"
+    fixedInViewport
+    [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+    [mode]="(isHandset$ | async) ? 'over' : 'side'"
+    [opened]="(isHandset$ | async) === false"
+  >
+    <mat-toolbar>kishka.strybaie</mat-toolbar>
+    <mat-nav-list>
+      <li mat-list-item *ngFor="let menuItem of menuItems">
+        <a routerLinkActive="active" [routerLink]="[menuItem.path]">
+          <mat-icon>{{ menuItem.icon }}</mat-icon>
+          <p>{{ menuItem.title }}</p>
+        </a>
+      </li>
+      <li mat-list-item class="last">
+        <a (click)="logout()">
+          <mat-icon>logout</mat-icon>
+          <p>Вийти</p>
+        </a>
+      </li>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <mat-toolbar>
+      <button
+        type="button"
+        aria-label="Toggle sidenav"
+        mat-icon-button
+        (click)="drawer.toggle()"
+        *ngIf="isHandset$ | async"
+      >
+        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+      </button>
+      <span>{{ pageTitle }}</span>
+    </mat-toolbar>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>

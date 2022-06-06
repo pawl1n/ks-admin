@@ -1,0 +1,53 @@
+.sidenav-container 
+  height: 100%
+
+
+.sidenav 
+  width: 200px
+
+
+.sidenav .mat-toolbar 
+  background: inherit
+
+
+.mat-toolbar.mat-primary 
+  position: sticky
+  top: 0
+  z-index: 1
+
+mat-nav-list
+
+  li.last
+    position: absolute
+    bottom: 0
+    cursor: pointer
+
+  li
+    list-style: none
+    // a.active
+    //   background-color: #f44336
+    //     box-shadow: 0 4px 20px 0 rgb(0 0 0 / 14%), 0 7px 10px -5px rgb(244 67 54 / 40%)
+    //     color: white
+    
+    a
+      display: flex
+      margin: 0 15px
+      border-radius: 3px
+      padding: 10px 15px
+      transition: all 150ms ease-in
+
+      mat-icon
+        float: left
+        margin-right: 15px
+        line-height: 30px
+        width: 30px
+        text-align: center
+        vertical-align: middle
+
+      p
+        margin: 0
+        line-height: 30px
+        font-size: 14px
+        height: auto
+        white-space: nowrap
+      

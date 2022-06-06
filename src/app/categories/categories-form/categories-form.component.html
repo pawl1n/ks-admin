@@ -1,0 +1,30 @@
+<mat-card-content>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <mat-form-field>
+      <mat-label>Назва категорії</mat-label>
+      <input
+        matInput
+        placeholder="Верхній одяг"
+        [formControlName]="'name'"
+        required
+      />
+      <mat-error *ngIf="form.get('name')?.invalid">{{
+        getNameError()
+      }}</mat-error>
+    </mat-form-field>
+    <div class="buttons">
+      <button
+        mat-raised-button
+        type="submit"
+        [disabled]="form.invalid || form.disabled"
+        class="save"
+      >
+        Зберегти
+      </button>
+      <button mat-raised-button class="delete">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+  </form>
+  <app-products></app-products>
+</mat-card-content>
