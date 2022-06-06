@@ -5,7 +5,8 @@
       let indexOfelement = index
     "
   >
-    <a mat-button [routerLink]="breadcrumb.url">{{ breadcrumb.label }}</a
+    <a mat-button [routerLink]="breadcrumb.url"
+      ><h1>{{ breadcrumb.label }}</h1></a
     ><mat-icon *ngIf="indexOfelement != breadcrumbs.length - 1"
       >chevron_right</mat-icon
     >
