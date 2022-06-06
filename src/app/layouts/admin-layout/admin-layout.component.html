@@ -27,14 +27,13 @@
     <mat-toolbar>
       <button
         type="button"
-        aria-label="Toggle sidenav"
         mat-icon-button
         (click)="drawer.toggle()"
         *ngIf="isHandset$ | async"
       >
-        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+        <mat-icon>menu</mat-icon>
       </button>
-      <span>{{ pageTitle }}</span>
+      <app-breadcrumb></app-breadcrumb>
     </mat-toolbar>
     <router-outlet></router-outlet>
   </mat-sidenav-content>

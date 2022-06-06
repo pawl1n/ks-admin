@@ -14,6 +14,8 @@ import { ProductsComponent } from './products/products.component';
 import { RegisterComponent } from './register/register.component';
 import { TokenInterceptor } from 'classes/token.interceptor';
 import { CustomPaginator } from 'values/CustomPaginatorConfiguration';
+import { CategoriesFormComponent } from './categories/categories-form/categories-form.component';
+import { ProductsFormComponent } from './products/products-form/products-form.component';
 import { ErrorHandlerInterceptor } from 'classes/error-handler.interceptor';
 
 import { MatSliderModule } from '@angular/material/slider';
@@ -35,8 +37,7 @@ import { MatInputModule } from '@angular/material/input';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { CategoriesFormComponent } from './categories/categories-form/categories-form.component';
-import { ProductsFormComponent } from './products/products-form/products-form.component';
+import { BreadcrumbComponent } from './ui/breadcrumb/breadcrumb.component';
 
 @NgModule({
   declarations: [
@@ -50,6 +51,7 @@ import { ProductsFormComponent } from './products/products-form/products-form.co
     RegisterComponent,
     CategoriesFormComponent,
     ProductsFormComponent,
+    BreadcrumbComponent,
   ],
   imports: [
     BrowserModule,

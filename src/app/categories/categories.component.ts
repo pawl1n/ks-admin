@@ -6,7 +6,7 @@ import { CategoriesDataSource } from './categories-datasource';
 import { Category } from 'interfaces/category';
 import { CategoriesService } from 'services/categories.service';
 import { Router } from '@angular/router';
-import { MaterialService } from 'services/material.service';
+import { MaterialService } from 'src/app/ui/material.service';
 
 @Component({
   selector: 'app-categories',

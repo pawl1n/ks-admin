@@ -4,7 +4,7 @@ import { MatSort } from '@angular/material/sort';
 import { catchError, map, merge, mergeAll, Observable } from 'rxjs';
 import { Category } from 'interfaces/category';
 import { CategoriesService } from 'services/categories.service';
-import { MaterialService } from 'services/material.service';
+import { MaterialService } from 'src/app/ui/material.service';
 
 /**
  * Data source for the Categories view. This class should

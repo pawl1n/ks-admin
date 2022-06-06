@@ -1,0 +1,13 @@
+<ul>
+  <li
+    *ngFor="
+      let breadcrumb of breadcrumbs$ | async as breadcrumbs;
+      let indexOfelement = index
+    "
+  >
+    <a mat-button [routerLink]="breadcrumb.url">{{ breadcrumb.label }}</a
+    ><mat-icon *ngIf="indexOfelement != breadcrumbs.length - 1"
+      >chevron_right</mat-icon
+    >
+  </li>
+</ul>

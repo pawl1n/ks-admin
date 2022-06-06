@@ -3,7 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { CategoriesService } from 'services/categories.service';
-import { MaterialService } from 'services/material.service';
+import { MaterialService } from 'src/app/ui/material.service';
 
 @Component({
   selector: 'app-categories-form',

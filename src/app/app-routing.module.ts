@@ -41,7 +41,7 @@ const routes: Routes = [
         path: 'dashboard',
         component: DashboardComponent,
         data: {
-          title: 'Головна',
+          breadcrumb: 'Головна',
         },
         title: 'Головна',
       },
@@ -49,18 +49,21 @@ const routes: Routes = [
         path: 'products',
         component: ProductsComponent,
         data: {
-          title: 'Товари',
+          breadcrumb: 'Товари',
         },
         title: 'Товари',
       },
       {
         path: 'categories',
+        data: {
+          breadcrumb: 'Категорії',
+        },
         children: [
           {
             path: '',
             component: CategoriesComponent,
             data: {
-              title: 'Категорії',
+              breadcrumb: '',
             },
             title: 'Категорії',
           },
@@ -68,7 +71,7 @@ const routes: Routes = [
             path: 'new',
             component: CategoriesFormComponent,
             data: {
-              title: 'Створення категорії',
+              breadcrumb: 'Створення категорії',
             },
             title: 'Створення категорії',
           },
@@ -76,9 +79,9 @@ const routes: Routes = [
             path: ':id',
             component: CategoriesFormComponent,
             data: {
-              title: 'Створення категорії',
+              breadcrumb: 'Редагування категорії',
             },
-            title: 'Створення категорії',
+            title: 'Редагування категорії',
           },
         ],
       },
@@ -86,7 +89,7 @@ const routes: Routes = [
         path: 'orders',
         component: DashboardComponent,
         data: {
-          title: 'Замовлення',
+          breadcrumb: 'Замовлення',
         },
         title: 'Замовлення',
       },
@@ -94,7 +97,7 @@ const routes: Routes = [
         path: 'users',
         component: DashboardComponent,
         data: {
-          title: 'Клієнти',
+          breadcrumb: 'Клієнти',
         },
         title: 'Клієнти',
       },
@@ -102,16 +105,13 @@ const routes: Routes = [
         path: 'purchases',
         component: DashboardComponent,
         data: {
-          title: 'Закупки',
+          breadcrumb: 'Закупки',
         },
         title: 'Закупки',
       },
       {
         path: 'logout',
         component: DashboardComponent,
-        data: {
-          title: 'logout',
-        },
       },
     ],
   },

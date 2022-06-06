@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { catchError, map, Observable } from 'rxjs';
 import { Response } from 'interfaces/response';
 import { Category } from 'interfaces/category';
-import { MaterialService } from './material.service';
+import { MaterialService } from '../src/app/ui/material.service';
 
 @Injectable({
   providedIn: 'root',
