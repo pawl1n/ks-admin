@@ -9,6 +9,7 @@ import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.compon
 import { RegisterComponent } from './register/register.component';
 import { AuthGuard } from 'classes/auth.guard';
 import { CategoriesFormComponent } from './categories/categories-form/categories-form.component';
+import { ProductsFormComponent } from './products/products-form/products-form.component';
 
 const routes: Routes = [
   {
@@ -47,11 +48,35 @@ const routes: Routes = [
       },
       {
         path: 'products',
-        component: ProductsComponent,
         data: {
           breadcrumb: 'Товари',
         },
-        title: 'Товари',
+        children: [
+          {
+            path: '',
+            component: ProductsComponent,
+            data: {
+              breadcrumb: '',
+            },
+            title: 'Товари',
+          },
+          {
+            path: 'new',
+            component: ProductsFormComponent,
+            data: {
+              breadcrumb: 'Створення товару',
+            },
+            title: 'Створення товару',
+          },
+          {
+            path: ':id',
+            component: ProductsFormComponent,
+            data: {
+              breadcrumb: 'Редагування товару',
+            },
+            title: 'Редагування товару',
+          },
+        ],
       },
       {
         path: 'categories',
@@ -76,7 +101,7 @@ const routes: Routes = [
             title: 'Створення категорії',
           },
           {
-            path: ':id',
+            path: ':categoryId',
             component: CategoriesFormComponent,
             data: {
               breadcrumb: 'Редагування категорії',
