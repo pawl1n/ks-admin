@@ -1,7 +1,7 @@
 import { DataSource } from '@angular/cdk/collections';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { map, merge, mergeAll, Observable } from 'rxjs';
+import { map, merge, mergeAll, Observable, of } from 'rxjs';
 import { Category } from 'interfaces/category';
 import { CategoriesService } from 'services/categories.service';
 import { MaterialService } from 'src/app/ui/material.service';
@@ -12,20 +12,47 @@ import { MaterialService } from 'src/app/ui/material.service';
  * (including sorting, pagination, and filtering).
  */
 export class CategoriesDataSource extends DataSource<Category> {
-  categories$: Observable<Category[]>;
+  categories: Category[];
   paginator: MatPaginator | undefined;
   sort: MatSort | undefined;
+  loading = true;
 
   constructor(
     private categoriesService: CategoriesService,
     private matService: MaterialService
   ) {
     super();
-    this.categories$ = this.loadCategories();
+    this.categories = [];
   }
 
   loadCategories(): Observable<Category[]> {
-    return this.categoriesService.getCategories();
+    this.loading = true;
+    return this.categoriesService.get().pipe(
+      map((cats) => {
+        this.loading = false;
+        this.categories = cats;
+        if (this.paginator && this.sort) {
+          // Combine everything that affects the rendered data into one update
+          // stream for the data-table to consume.
+          return merge(
+            of(this.categories),
+            this.paginator!.page,
+            this.sort!.sortChange
+          ).pipe(
+            map(() => {
+              return this.getPagedData(
+                this.getSortedData([...this.categories])
+              );
+            })
+          );
+        } else {
+          throw Error(
+            'Please set the paginator and sort on the data source before connecting.'
+          );
+        }
+      }),
+      mergeAll()
+    );
   }
 
   /**
@@ -34,24 +61,7 @@ export class CategoriesDataSource extends DataSource<Category> {
    * @returns A stream of the items to be rendered.
    */
   connect(): Observable<Category[]> {
-    if (this.paginator && this.sort) {
-      // Combine everything that affects the rendered data into one update
-      // stream for the data-table to consume.
-      return merge(
-        this.categories$,
-        this.paginator!.page,
-        this.sort!.sortChange
-      ).pipe(
-        map(() => {
-          return this.getPagedData(this.getSortedData(this.categories$));
-        }),
-        mergeAll()
-      );
-    } else {
-      throw Error(
-        'Please set the paginator and sort on the data source before connecting.'
-      );
-    }
+    return this.loadCategories();
   }
 
   /**
@@ -64,14 +74,10 @@ export class CategoriesDataSource extends DataSource<Category> {
    * Paginate the data (client-side). If you're using server-side pagination,
    * this would be replaced by requesting the appropriate data from the server.
    */
-  private getPagedData(data: Observable<Category[]>): Observable<Category[]> {
+  private getPagedData(data: Category[]): Category[] {
     if (this.paginator) {
       const startIndex = this.paginator.pageIndex * this.paginator.pageSize;
-      return data.pipe(
-        map((cats: Category[]) => {
-          return cats.splice(startIndex, this.paginator?.pageSize);
-        })
-      );
+      return data.splice(startIndex, this.paginator?.pageSize);
     } else {
       return data;
     }
@@ -81,24 +87,20 @@ export class CategoriesDataSource extends DataSource<Category> {
    * Sort the data (client-side). If you're using server-side sorting,
    * this would be replaced by requesting the appropriate data from the server.
    */
-  private getSortedData(data: Observable<Category[]>): Observable<Category[]> {
+  private getSortedData(data: Category[]): Category[] {
     if (!this.sort || !this.sort.active || this.sort.direction === '') {
       return data;
     }
 
-    return data.pipe(
-      map((cats: Category[]) => {
-        return cats.sort((a, b) => {
-          const isAsc = this.sort?.direction === 'asc';
-          switch (this.sort?.active) {
-            case 'name':
-              return compare(a.name, b.name, isAsc);
-            default:
-              return 0;
-          }
-        });
-      })
-    );
+    return data.sort((a, b) => {
+      const isAsc = this.sort?.direction === 'asc';
+      switch (this.sort?.active) {
+        case 'name':
+          return compare(a.name, b.name, isAsc);
+        default:
+          return 0;
+      }
+    });
   }
 }
 

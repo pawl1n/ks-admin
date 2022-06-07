@@ -1,7 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Category, instanceofCategory } from 'interfaces/category';
+import { of, Subscription, switchMap } from 'rxjs';
 import { CategoriesService } from 'services/categories.service';
 import { MaterialService } from 'src/app/ui/material.service';
 
@@ -10,10 +11,10 @@ import { MaterialService } from 'src/app/ui/material.service';
   templateUrl: './categories-form.component.html',
   styleUrls: ['./categories-form.component.sass'],
 })
-export class CategoriesFormComponent implements OnInit, OnDestroy {
+export class CategoriesFormComponent implements OnInit {
   form!: FormGroup;
-  sub!: Subscription;
   isNew = true;
+  category?: Category;
 
   constructor(
     private categories: CategoriesService,
@@ -27,39 +28,90 @@ export class CategoriesFormComponent implements OnInit, OnDestroy {
       name: new FormControl('', [Validators.required]),
     });
 
-    this.route.params.subscribe({
-      next: (params: Params) => {
-        if (params['id']) {
-          this.isNew = false;
-        }
+    this.form.disable();
+
+    this.route.params
+      .pipe(
+        switchMap((params: Params) => {
+          if (params['categoryId']) {
+            this.isNew = false;
+            return this.categories.getById(params['categoryId']);
+          } else {
+            return of(null);
+          }
+        })
+      )
+      .subscribe({
+        next: (category: Category | any) => {
+          if (category && instanceofCategory(category)) {
+            this.category = category;
+            this.form.patchValue({
+              name: category.name,
+            });
+          }
+          this.form.enable();
+        },
+      });
+  }
+
+  onSubmit() {
+    if (this.isNew) {
+      this.create();
+    } else {
+      this.update();
+    }
+  }
+
+  create() {
+    this.form.disable();
+    this.categories.create(this.form.value).subscribe({
+      next: () => {
+        this.router.navigate(['categories']);
+      },
+      error: () => {
+        this.form.enable();
       },
     });
   }
 
-  ngOnDestroy(): void {
-    // this.sub.unsubscribe();
-  }
-
-  onSubmit() {
-    // this.form.disable();
-    // this.sub = this.categories.create(this.form.value).subscribe({
-    //   next: () => {
-    //     this.router.navigate(['categories'], {
-    //       queryParams: {
-    //         created: true,
-    //       },
-    //     });
-    //   },
-    //   error: (error: any) => {
-    //     this.matService.openSnackBar(error.error.message);
-    //     this.form.enable();
-    //   },
-    // });
+  update() {
+    this.form.disable();
+    this.categories
+      .update(this.category?._id!, {
+        name: this.form.value.name,
+      })
+      .subscribe({
+        next: (category: Category) => {
+          this.category = category;
+          this.form.enable();
+        },
+        error: () => {
+          this.form.enable();
+        },
+      });
   }
 
   getNameError() {
     if (this.form.get('name')?.hasError('required')) {
       return 'Необхідно ввести назву категорії';
     } else return '';
+  }
+
+  delete() {
+    if (this.form.disabled) {
+      return;
+    }
+    const decision = window.confirm(
+      `Ви впевнені, що бажаєте видалити категорію "${this.category?.name}"?`
+    );
+    if (decision) {
+      this.categories.delete(this.category?._id!).subscribe({
+        next: (deleted: Boolean) => {
+          if (deleted) {
+            this.router.navigate(['categories']);
+          }
+        },
+      });
+    }
   }
 }

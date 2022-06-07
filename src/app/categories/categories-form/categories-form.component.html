@@ -16,14 +16,24 @@
       <button
         mat-raised-button
         type="submit"
-        [disabled]="form.invalid || form.disabled"
+        [disabled]="
+          form.invalid ||
+          form.disabled ||
+          (!isNew && form.value.name == category?.name)
+        "
         class="save"
       >
         Зберегти
       </button>
-      <button mat-raised-button class="delete">
+      <a
+        *ngIf="!isNew"
+        [disabled]="form.disabled"
+        mat-raised-button
+        class="delete"
+        (click)="delete()"
+      >
         <mat-icon>delete</mat-icon>
-      </button>
+      </a>
     </div>
   </form>
   <app-products></app-products>

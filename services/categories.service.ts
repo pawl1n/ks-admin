@@ -1,18 +1,19 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { catchError, map, Observable } from 'rxjs';
+import { first, map, Observable } from 'rxjs';
 import { Response } from 'interfaces/response';
-import { Category } from 'interfaces/category';
+import { Category, instanceofCategory } from 'interfaces/category';
 import { MaterialService } from '../src/app/ui/material.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CategoriesService {
+  private path = '/api/categories/';
   constructor(private http: HttpClient, private matService: MaterialService) {}
 
-  getCategories(): Observable<Category[]> {
-    return this.http.get<Response>('/api/categories').pipe(
+  get(category = ''): Observable<Category[]> {
+    return this.http.get<Response>(this.path).pipe(
       map((response: Response) => {
         if (response.success && response.data instanceof Array) {
           return response.data;
@@ -21,27 +22,66 @@ export class CategoriesService {
         this.matService.openSnackBar(response.message);
         return [];
       }),
-      catchError((err) => {
-        this.matService.openSnackBar('Сервер не відповідає');
-        return [];
-      })
+      first()
     );
   }
 
   create(category: Category): Observable<Category> | any {
-    return this.http.post<Response>('/api/categories', category).pipe(
+    return this.http.post<Response>(this.path, category).pipe(
       map((response: Response) => {
         if (response.success && response.data) {
+          this.matService.openSnackBar(
+            `Категорію "${response.data.name}" успішно створено`
+          );
           return response.data;
         }
         console.log(response.message);
         this.matService.openSnackBar(response.message);
         return response;
+      })
+    );
+  }
+
+  getById(id: string): Observable<Category> {
+    return this.http.get<Response>(this.path + id).pipe(
+      map((response: Response) => {
+        if (response.success && instanceofCategory(response.data)) {
+          return response.data;
+        } else {
+          this.matService.openSnackBar(response.message);
+          return null;
+        }
       }),
-      catchError((err) => {
-        this.matService.openSnackBar('Сервер не відповідає');
-        console.log(err);
-        return err;
+      first()
+    );
+  }
+
+  delete(id: string): Observable<Boolean> | any {
+    return this.http.delete<Response>(this.path + id).pipe(
+      map((response: Response) => {
+        this.matService.openSnackBar(response.message);
+        if (response.success) {
+          return true;
+        } else {
+          return false;
+        }
+      }),
+      first()
+    );
+  }
+
+  update(id: string, category: Category): Observable<Category> | any {
+    return this.http.patch<Response>(this.path + id, category).pipe(
+      map((response: Response) => {
+        if (response.success && response.data) {
+          this.matService.openSnackBar(
+            `Категорію "${response.data.name}" успішно змінено`
+          );
+          return response.data;
+        }
+        console.log(response.message);
+        this.matService.openSnackBar(response.message);
+        return response;
       })
     );
   }
