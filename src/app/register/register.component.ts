@@ -34,14 +34,11 @@ export class RegisterComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.form = new FormGroup({
       email: new FormControl('', [Validators.required, Validators.email]),
-      password: new FormControl(
-        '',
-        Validators.compose([
-          Validators.minLength(5),
-          Validators.required,
-          Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9]+$'),
-        ])
-      ),
+      password: new FormControl('', [
+        Validators.minLength(5),
+        Validators.required,
+        Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9]+$'),
+      ]),
     });
   }
   ngOnDestroy(): void {
@@ -51,14 +48,18 @@ export class RegisterComponent implements OnInit, OnDestroy {
   }
 
   getEmailErrorMessage() {
-    if (this.email.hasError('required')) {
+    if (this.form.get('email')?.hasError('required')) {
       return 'Необхідно ввести адресу електронної пошти';
-    } else if (this.email.hasError('email')) {
+    } else if (this.form.get('email')?.hasError('email')) {
       return 'Неправильно введено адресу електронної пошти';
     } else return '';
   }
   getPasswordErrorMessage() {
-    if (this.password.hasError('required')) {
+    if (this.form.get('password')?.hasError('minlength')) {
+      return 'Довжина паролю має бути від 5 символів';
+    } else if (this.form.get('password')?.hasError('pattern')) {
+      return 'Пароль повинен складатися із цифер та латинських літер та містити хоча б одну велику та маленьку літери';
+    } else if (this.form.get('password')?.hasError('required')) {
       return 'Необхідно ввести пароль';
     } else return '';
   }
