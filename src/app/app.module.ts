@@ -84,11 +84,11 @@ import { BreadcrumbComponent } from './ui/breadcrumb/breadcrumb.component';
       multi: true,
       useClass: TokenInterceptor,
     },
-    // {
-    //   provide: HTTP_INTERCEPTORS,
-    //   multi: true,
-    //   useClass: ErrorHandlerInterceptor,
-    // },
+    {
+      provide: HTTP_INTERCEPTORS,
+      multi: true,
+      useClass: ErrorHandlerInterceptor,
+    },
     {
       provide: MatPaginatorIntl,
       useValue: CustomPaginator(),

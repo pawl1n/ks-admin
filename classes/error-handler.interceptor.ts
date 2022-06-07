@@ -4,18 +4,27 @@ import {
   HttpHandler,
   HttpEvent,
   HttpInterceptor,
-  HttpResponse,
 } from '@angular/common/http';
-import { map, Observable, retry, retryWhen, tap } from 'rxjs';
+import { catchError, Observable } from 'rxjs';
+import { MaterialService } from 'src/app/ui/material.service';
 
 @Injectable()
 export class ErrorHandlerInterceptor implements HttpInterceptor {
-  constructor() {}
+  constructor(private matService: MaterialService) {}
 
   intercept(
     request: HttpRequest<unknown>,
     next: HttpHandler
   ): Observable<HttpEvent<unknown>> {
-    return next.handle(request);
+    return next.handle(request).pipe(
+      catchError((error) => {
+        if (error.error.message) {
+          this.matService.openSnackBar(error.error.message);
+        } else {
+          this.matService.openSnackBar('Сервер не відповідає');
+        }
+        throw error;
+      })
+    );
   }
 }
