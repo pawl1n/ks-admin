@@ -1,7 +1,7 @@
 import { DataSource } from '@angular/cdk/collections';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { catchError, map, merge, mergeAll, Observable } from 'rxjs';
+import { map, merge, mergeAll, Observable } from 'rxjs';
 import { Category } from 'interfaces/category';
 import { CategoriesService } from 'services/categories.service';
 import { MaterialService } from 'src/app/ui/material.service';
@@ -15,7 +15,6 @@ export class CategoriesDataSource extends DataSource<Category> {
   categories$: Observable<Category[]>;
   paginator: MatPaginator | undefined;
   sort: MatSort | undefined;
-  error = false;
 
   constructor(
     private categoriesService: CategoriesService,
@@ -26,15 +25,7 @@ export class CategoriesDataSource extends DataSource<Category> {
   }
 
   loadCategories(): Observable<Category[]> {
-    this.error = false;
-    return this.categoriesService.getCategories().pipe(
-      catchError((err) => {
-        this.matService.openSnackBar('Сервер не відповідає');
-        this.error = true;
-        console.log(err);
-        return [];
-      })
-    );
+    return this.categoriesService.getCategories();
   }
 
   /**

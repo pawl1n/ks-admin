@@ -23,7 +23,6 @@ export class CategoriesService {
       }),
       catchError((err) => {
         this.matService.openSnackBar('Сервер не відповідає');
-        console.log(err);
         return [];
       })
     );
