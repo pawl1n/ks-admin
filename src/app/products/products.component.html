@@ -21,50 +21,79 @@
     <mat-toolbar>
       <button
         mat-raised-button
-        matTooltip="Додати нову категорію"
-        routerLink="new"
+        matTooltip="Додати новий товар"
+        (click)="addNew()"
       >
         <mat-icon>add</mat-icon>
         Додати
       </button>
     </mat-toolbar>
-    <table mat-table class="full-width-table" matSort>
-      <!-- Name Column -->
-      <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Назва</th>
-        <td *matCellDef="let row">
-          {{ row.name }}
-        </td>
-      </ng-container>
-      <!-- Description Column -->
-      <ng-container matColumnDef="description">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Опис</th>
-        <td *matCellDef="let row">
-          {{ row.description }}
-        </td>
-      </ng-container>
-      <!-- Category Column -->
-      <ng-container matColumnDef="category">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Категорія</th>
-        <td *matCellDef="let row">
-          {{ row.category?.name }}
-        </td>
-      </ng-container>
-      <!-- Article Column -->
-      <ng-container matColumnDef="article">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Артикул</th>
-        <td *matCellDef="let row">
-          {{ row.article }}
-        </td>
-      </ng-container>
+    <div class="table-wrapper">
+      <table mat-table class="full-width-table" matSort>
+        <!-- Name Column -->
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Назва</th>
+          <td
+            *matCellDef="let row"
+            [routerLink]="'/products/' + row._id"
+            class="clickable"
+          >
+            {{ row.name }}
+          </td>
+        </ng-container>
+        <!-- Price Column -->
+        <ng-container matColumnDef="price">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Ціна</th>
+          <td *matCellDef="let row">
+            {{ row.price }}
+          </td>
+        </ng-container>
+        <!-- Description Column -->
+        <ng-container matColumnDef="description">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Опис</th>
+          <td *matCellDef="let row">
+            {{ row.description }}
+          </td>
+        </ng-container>
+        <!-- Category Column -->
+        <ng-container matColumnDef="category">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Категорія</th>
+          <td
+            *matCellDef="let row"
+            [routerLink]="
+              row.category?._id ? '/categories/' + row.category._id : null
+            "
+            class="clickable"
+          >
+            {{ row.category?.name }}
+          </td>
+        </ng-container>
+        <!-- Article Column -->
+        <ng-container matColumnDef="article">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Артикул</th>
+          <td *matCellDef="let row">
+            {{ row.article }}
+          </td>
+        </ng-container>
+        <!-- Stock Column -->
+        <ng-container matColumnDef="stock">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Кількість</th>
+          <td *matCellDef="let row">
+            {{ row.stock }}
+          </td>
+        </ng-container>
+        <!-- Size Column -->
+        <ng-container matColumnDef="size">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Розмір</th>
+          <td *matCellDef="let row">
+            {{ row.size }}
+          </td>
+        </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr
-        mat-row
-        *matRowDef="let row; columns: displayedColumns"
-        (click)="onRowClicked(row)"
-      ></tr>
-    </table>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+    </div>
 
     <mat-paginator
       #paginator

@@ -12,7 +12,7 @@ export class CategoriesService {
   private path = '/api/categories/';
   constructor(private http: HttpClient, private matService: MaterialService) {}
 
-  get(category = ''): Observable<Category[]> {
+  get(): Observable<Category[]> {
     return this.http.get<Response>(this.path).pipe(
       map((response: Response) => {
         if (response.success && response.data instanceof Array) {

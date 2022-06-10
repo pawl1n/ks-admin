@@ -1,0 +1,196 @@
+<mat-card>
+  <mat-card-content>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <mat-accordion multi>
+        <mat-expansion-panel expanded>
+          <mat-expansion-panel-header>
+            <mat-panel-title> Основна інформація </mat-panel-title>
+            <mat-panel-description> </mat-panel-description>
+          </mat-expansion-panel-header>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Номер</mat-label>
+            <input matInput formControlName="order" readonly />
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Дата</mat-label>
+            <input matInput formControlName="date" readonly />
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Клієнт</mat-label>
+            <mat-select formControlName="user">
+              <mat-option *ngFor="let item of users" [value]="item._id">
+                {{ item.name ? item.name : item.email }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Статус</mat-label>
+            <mat-select formControlName="status">
+              <mat-option *ngFor="let item of statuses" [value]="item">
+                {{ item }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title> Доставка </mat-panel-title>
+            <mat-panel-description></mat-panel-description>
+          </mat-expansion-panel-header>
+
+          <mat-form-field>
+            <mat-label>Місто</mat-label>
+            <input matInput formControlName="city" />
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Поштовий код</mat-label>
+            <input matInput formControlName="postal" />
+          </mat-form-field>
+          <!-- <mat-form-field>
+            <mat-label>Вулиця</mat-label>
+            <input matInput formControlName="street" />
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Будинок</mat-label>
+            <input matInput formControlName="building" />
+          </mat-form-field> -->
+          <mat-form-field>
+            <mat-label>Відділ</mat-label>
+            <input matInput formControlName="department" />
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Метод доставки</mat-label>
+            <mat-select formControlName="shippingMethod">
+              <mat-option *ngFor="let item of methods" [value]="item">
+                {{ item }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Телефон</mat-label>
+            <input matInput formControlName="phone" />
+          </mat-form-field>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title> Товари </mat-panel-title>
+            <mat-panel-description></mat-panel-description>
+          </mat-expansion-panel-header>
+
+          <mat-toolbar>
+            <form [formGroup]="addProductForm" (ngSubmit)="onSubmit()">
+              <mat-form-field>
+                <mat-label>Товар</mat-label>
+                <input matInput formControlName="product" />
+              </mat-form-field>
+              <mat-form-field>
+                <mat-label>Кількість</mat-label>
+                <input matInput formControlName="quantity" />
+              </mat-form-field>
+              <mat-form-field>
+                <mat-label>Ціна</mat-label>
+                <input matInput formControlName="price" />
+              </mat-form-field>
+            </form>
+            <button
+              mat-raised-button
+              matTooltip="Додати новий товар"
+              (click)="addNewProduct()"
+            >
+              <mat-icon>add</mat-icon>
+              Додати
+            </button>
+          </mat-toolbar>
+          <div class="table-wrapper">
+            <table
+              mat-table
+              class="full-width-table"
+              matSort
+              [dataSource]="dataSource"
+            >
+              <!-- Name Column -->
+              <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Назва</th>
+                <td
+                  *matCellDef="let row"
+                  [routerLink]="'/products/' + row.product?._id"
+                  class="clickable"
+                >
+                  {{ row.product?.name }}
+                </td>
+              </ng-container>
+              <!-- Quantity Column -->
+              <ng-container matColumnDef="quantity">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                  Кількість
+                </th>
+                <td *matCellDef="let row">
+                  {{ row.quantity }}
+                </td>
+              </ng-container>
+              <!-- Cost Column -->
+              <ng-container matColumnDef="cost">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Ціна</th>
+                <td *matCellDef="let row">
+                  {{ row.cost }}
+                </td>
+              </ng-container>
+              <!-- Article Column -->
+              <ng-container matColumnDef="article">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                  Артикул
+                </th>
+                <td *matCellDef="let row">
+                  {{ row.product?.article }}
+                </td>
+              </ng-container>
+              <!-- Size Column -->
+              <ng-container matColumnDef="size">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                  Розмір
+                </th>
+                <td *matCellDef="let row">
+                  {{ row.product?.size }}
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+            </table>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+
+      <div class="buttons">
+        <button
+          mat-raised-button
+          type="submit"
+          [disabled]="
+            form.invalid ||
+            form.disabled ||
+            (!isNew &&
+              order?.order == form.value.order &&
+              order?.date == form.value.date &&
+              order?.user == form.value.user &&
+              order?.status == form.value.status)
+          "
+          class="save"
+        >
+          Зберегти
+        </button>
+        <a
+          *ngIf="!isNew"
+          [disabled]="form.disabled"
+          mat-raised-button
+          class="delete"
+          (click)="delete()"
+        >
+          <mat-icon>delete</mat-icon>
+        </a>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>

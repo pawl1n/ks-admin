@@ -10,6 +10,10 @@ import { RegisterComponent } from './register/register.component';
 import { AuthGuard } from 'classes/auth.guard';
 import { CategoriesFormComponent } from './categories/categories-form/categories-form.component';
 import { ProductsFormComponent } from './products/products-form/products-form.component';
+import { UsersComponent } from './users/users.component';
+import { UsersFormComponent } from './users/users-form/users-form.component';
+import { OrdersComponent } from './orders/orders.component';
+import { OrdersFormComponent } from './orders/orders-form/orders-form.component';
 
 const routes: Routes = [
   {
@@ -111,20 +115,68 @@ const routes: Routes = [
         ],
       },
       {
-        path: 'orders',
-        component: DashboardComponent,
-        data: {
-          breadcrumb: 'Замовлення',
-        },
-        title: 'Замовлення',
-      },
-      {
         path: 'users',
-        component: DashboardComponent,
         data: {
           breadcrumb: 'Клієнти',
         },
-        title: 'Клієнти',
+        children: [
+          {
+            path: '',
+            component: UsersComponent,
+            title: 'Клієнти',
+            data: {
+              breadcrumb: '',
+            },
+          },
+          {
+            path: 'new',
+            component: UsersFormComponent,
+            title: 'Додавання клієнта',
+            data: {
+              breadcrumb: 'Додавання клієнта',
+            },
+          },
+          {
+            path: ':id',
+            component: UsersFormComponent,
+            title: 'Редагування клієнта',
+            data: {
+              breadcrumb: 'Редагування клієнта',
+            },
+          },
+        ],
+      },
+      {
+        path: 'orders',
+        data: {
+          breadcrumb: 'Замовлення',
+        },
+        children: [
+          {
+            path: '',
+            component: OrdersComponent,
+            title: 'Замовлення',
+            data: {
+              breadcrumb: '',
+            },
+          },
+          {
+            path: 'new',
+            component: OrdersFormComponent,
+            title: 'Створення замовлення',
+            data: {
+              breadcrumb: 'Створення замовлення',
+            },
+          },
+          {
+            path: ':id',
+            component: OrdersFormComponent,
+            title: 'Редагування замовлення',
+            data: {
+              breadcrumb: 'Редагування замовлення',
+            },
+          },
+        ],
       },
       {
         path: 'purchases',

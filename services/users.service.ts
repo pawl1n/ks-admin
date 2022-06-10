@@ -2,40 +2,36 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { first, map, Observable } from 'rxjs';
 import { Response } from 'interfaces/response';
-import { Product, instanceofProduct } from 'interfaces/product';
+import { User } from 'interfaces/user';
 import { MaterialService } from '../src/app/ui/material.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class ProductsService {
-  private path = '/api/products/';
+export class UsersService {
+  private path = '/api/users/';
   constructor(private http: HttpClient, private matService: MaterialService) {}
 
-  get(params = {}): Observable<Product[]> {
-    return this.http
-      .get<Response>(this.path, {
-        params: params,
-      })
-      .pipe(
-        map((response: Response) => {
-          if (response.success && response.data instanceof Array) {
-            return response.data;
-          }
-          console.log(response.message);
-          this.matService.openSnackBar(response.message);
-          return [];
-        }),
-        first()
-      );
+  get(): Observable<User[]> {
+    return this.http.get<Response>(this.path).pipe(
+      map((response: Response) => {
+        if (response.success && response.data instanceof Array) {
+          return response.data;
+        }
+        console.log(response.message);
+        this.matService.openSnackBar(response.message);
+        return [];
+      }),
+      first()
+    );
   }
 
-  create(product: FormData): Observable<Product> | any {
-    return this.http.post<Response>(this.path, product).pipe(
+  create(user: FormData): Observable<User> | any {
+    return this.http.post<Response>(this.path, user).pipe(
       map((response: Response) => {
         if (response.success && response.data) {
           this.matService.openSnackBar(
-            `Товар "${response.data.name}" успішно створено`
+            `Клієнта "${response.data.email}" додано успішно`
           );
           return response.data;
         }
@@ -46,10 +42,10 @@ export class ProductsService {
     );
   }
 
-  getById(id: string): Observable<Product> {
+  getById(id: string): Observable<User> {
     return this.http.get<Response>(this.path + id).pipe(
       map((response: Response) => {
-        if (response.success && instanceofProduct(response.data)) {
+        if (response.success) {
           return response.data;
         } else {
           this.matService.openSnackBar(response.message);
@@ -74,12 +70,12 @@ export class ProductsService {
     );
   }
 
-  update(id: string, product: FormData): Observable<Product> | any {
-    return this.http.patch<Response>(this.path + id, product).pipe(
+  update(id: string, user: User): Observable<User> | any {
+    return this.http.patch<Response>(this.path + id, user).pipe(
       map((response: Response) => {
         if (response.success && response.data) {
           this.matService.openSnackBar(
-            `Товар "${response.data.name}" успішно змінено`
+            `Інформацію про клієнта "${response.data.email}" успішно змінено`
           );
           return response.data;
         }

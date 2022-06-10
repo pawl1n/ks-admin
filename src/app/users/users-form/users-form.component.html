@@ -2,17 +2,26 @@
   <mat-card-content>
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
       <mat-form-field>
-        <mat-label>Назва категорії</mat-label>
+        <mat-label>Email</mat-label>
         <input
           matInput
-          placeholder="Верхній одяг"
-          [formControlName]="'name'"
+          placeholder="example@gmail.com"
+          [formControlName]="'email'"
           required
         />
         <mat-error *ngIf="form.get('name')?.invalid">{{
-          getNameError()
+          getEmailError()
         }}</mat-error>
       </mat-form-field>
+      <mat-form-field>
+        <mat-label>Імʼя</mat-label>
+        <input matInput [formControlName]="'name'" />
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Телефон</mat-label>
+        <input matInput [formControlName]="'phone'" />
+      </mat-form-field>
+      <mat-checkbox formControlName="isAdmin">Адміністратор</mat-checkbox>
       <div class="buttons">
         <button
           mat-raised-button
@@ -20,7 +29,11 @@
           [disabled]="
             form.invalid ||
             form.disabled ||
-            (!isNew && form.value.name == category?.name)
+            (!isNew &&
+              user?.name == form.value.name &&
+              user?.email == form.value.email &&
+              user?.phone == form.value.phone &&
+              user?.isAdmin == form.value.isAdmin)
           "
           class="save"
         >
@@ -37,6 +50,5 @@
         </a>
       </div>
     </form>
-    <app-products *ngIf="!isNew"></app-products>
   </mat-card-content>
 </mat-card>

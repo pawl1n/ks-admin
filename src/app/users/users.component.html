@@ -1,0 +1,69 @@
+<mat-card>
+  <mat-card-content>
+    <mat-toolbar>
+      <button
+        mat-raised-button
+        matTooltip="Додати нового користувача"
+        (click)="addNew()"
+      >
+        <mat-icon>add</mat-icon>
+        Додати
+      </button>
+    </mat-toolbar>
+    <div class="table-wrapper">
+      <table mat-table class="full-width-table" matSort>
+        <!-- Name Column -->
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Імʼя</th>
+          <td *matCellDef="let row">
+            {{ row.name }}
+          </td>
+        </ng-container>
+        <!-- Email Column -->
+        <ng-container matColumnDef="email">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Email</th>
+          <td *matCellDef="let row">
+            {{ row.email }}
+          </td>
+        </ng-container>
+        <!-- Phone Column -->
+        <ng-container matColumnDef="phone">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Телефон</th>
+          <td *matCellDef="let row">
+            {{ row.phone }}
+          </td>
+        </ng-container>
+        <!-- IsAdmin Column -->
+        <ng-container matColumnDef="isAdmin">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            Адміністратор
+          </th>
+          <td *matCellDef="let row">
+            <mat-checkbox [checked]="row.isAdmin" disabled></mat-checkbox>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr
+          mat-row
+          *matRowDef="let row; columns: displayedColumns"
+          [routerLink]="'/users/' + row._id"
+          class="clickable"
+        ></tr>
+      </table>
+    </div>
+
+    <mat-paginator
+      #paginator
+      [length]="dataSource?.users?.length"
+      [pageIndex]="0"
+      [pageSize]="10"
+      [pageSizeOptions]="[5, 10, 20]"
+      aria-label="Оберіть сторінку"
+    >
+    </mat-paginator>
+  </mat-card-content>
+  <div class="spinner-container" *ngIf="dataSource.loading">
+    <mat-spinner></mat-spinner>
+  </div>
+</mat-card>

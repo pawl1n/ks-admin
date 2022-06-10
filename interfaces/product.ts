@@ -6,8 +6,10 @@ export interface Product {
   description?: string;
   images?: Array<string>;
   price: number;
-  category?: Category;
+  category: Category;
   article?: string;
+  stock?: number;
+  size?: string;
 }
 
 export function instanceofProduct(object: any) {

@@ -5,8 +5,8 @@ import { MatTable } from '@angular/material/table';
 import { ProductsDataSource } from './products-datasource';
 import { Category } from 'interfaces/category';
 import { ProductsService } from 'services/products.service';
-import { Router } from '@angular/router';
-import { MaterialService } from 'src/app/ui/material.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Product } from 'interfaces/product';
 
 @Component({
   selector: 'app-products',
@@ -16,18 +16,25 @@ import { MaterialService } from 'src/app/ui/material.service';
 export class ProductsComponent implements AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-  @ViewChild(MatTable) table!: MatTable<Category>;
+  @ViewChild(MatTable) table!: MatTable<Product>;
   dataSource: ProductsDataSource;
 
-  /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
-  displayedColumns = ['name', 'description', 'category', 'article'];
+  displayedColumns = [
+    'name',
+    'price',
+    'description',
+    'category',
+    'article',
+    'stock',
+    'size',
+  ];
 
   constructor(
     private productsService: ProductsService,
     private router: Router,
-    private matService: MaterialService
+    private route: ActivatedRoute
   ) {
-    this.dataSource = new ProductsDataSource(productsService, matService);
+    this.dataSource = new ProductsDataSource(productsService, route);
   }
 
   ngAfterViewInit(): void {
@@ -37,6 +44,14 @@ export class ProductsComponent implements AfterViewInit {
   }
 
   onRowClicked(row: Category) {
-    // this.router.navigate(['Products', row._id]);
+    this.router.navigate(['products', row._id]);
+  }
+
+  addNew() {
+    this.router.navigate(['products/new'], {
+      queryParams: {
+        categoryId: this.dataSource.categoryId,
+      },
+    });
   }
 }

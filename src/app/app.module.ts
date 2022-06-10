@@ -17,6 +17,11 @@ import { CustomPaginator } from 'values/CustomPaginatorConfiguration';
 import { CategoriesFormComponent } from './categories/categories-form/categories-form.component';
 import { ProductsFormComponent } from './products/products-form/products-form.component';
 import { ErrorHandlerInterceptor } from 'classes/error-handler.interceptor';
+import { BreadcrumbComponent } from './ui/breadcrumb/breadcrumb.component';
+import { UsersComponent } from './users/users.component';
+import { UsersFormComponent } from './users/users-form/users-form.component';
+import { OrdersComponent } from './orders/orders.component';
+import { OrdersFormComponent } from './orders/orders-form/orders-form.component';
 
 import { MatSliderModule } from '@angular/material/slider';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -37,7 +42,11 @@ import { MatInputModule } from '@angular/material/input';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { BreadcrumbComponent } from './ui/breadcrumb/breadcrumb.component';
+import { MatSelectModule } from '@angular/material/select';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 @NgModule({
   declarations: [
@@ -52,6 +61,10 @@ import { BreadcrumbComponent } from './ui/breadcrumb/breadcrumb.component';
     CategoriesFormComponent,
     ProductsFormComponent,
     BreadcrumbComponent,
+    UsersComponent,
+    UsersFormComponent,
+    OrdersComponent,
+    OrdersFormComponent,
   ],
   imports: [
     BrowserModule,
@@ -77,6 +90,11 @@ import { BreadcrumbComponent } from './ui/breadcrumb/breadcrumb.component';
     ReactiveFormsModule,
     MatSnackBarModule,
     MatProgressSpinnerModule,
+    MatSelectModule,
+    MatCheckboxModule,
+    MatDatepickerModule,
+    MatTooltipModule,
+    MatExpansionModule,
   ],
   providers: [
     {

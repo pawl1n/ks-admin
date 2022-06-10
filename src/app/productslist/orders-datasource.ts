@@ -2,39 +2,39 @@ import { DataSource } from '@angular/cdk/collections';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { map, merge, mergeAll, Observable, of, switchMap } from 'rxjs';
-import { Product } from 'interfaces/product';
-import { ProductsService } from 'services/products.service';
+import { OrdersService } from 'services/orders.service';
 import { ActivatedRoute, Params } from '@angular/router';
+import { Order } from 'interfaces/order';
 
-export class ProductsDataSource extends DataSource<Product> {
-  products: Product[];
+export class OrdersDataSource extends DataSource<Order> {
+  orders: Order[];
   paginator: MatPaginator | undefined;
   sort: MatSort | undefined;
   loading = true;
-  categoryId?: string;
+  userId?: string;
 
   constructor(
-    private ProductsService: ProductsService,
+    private ordersService: OrdersService,
     private route: ActivatedRoute
   ) {
     super();
-    this.products = [];
+    this.orders = [];
   }
 
-  loadProducts(filter = {}): Observable<Product[]> {
+  loadOrders(filter: object): Observable<Order[]> {
     this.loading = true;
-    return this.ProductsService.get(filter).pipe(
-      map((cats) => {
+    return this.ordersService.get(filter).pipe(
+      map((orders) => {
         this.loading = false;
-        this.products = cats;
+        this.orders = orders;
         if (this.paginator && this.sort) {
           return merge(
-            of(this.products),
+            of(this.orders),
             this.paginator!.page,
             this.sort!.sortChange
           ).pipe(
             map(() => {
-              return this.getPagedData(this.getSortedData([...this.products]));
+              return this.getPagedData(this.getSortedData([...this.orders]));
             })
           );
         } else {
@@ -47,24 +47,24 @@ export class ProductsDataSource extends DataSource<Product> {
     );
   }
 
-  connect(): Observable<Product[]> {
+  connect(): Observable<Order[]> {
     return this.route.params.pipe(
       switchMap((params: Params) => {
         let filter = {};
-        if (params['categoryId']) {
-          this.categoryId = params['categoryId'];
+        if (params['userId']) {
+          this.userId = params['userId'];
           filter = {
-            categories: params['categoryId'],
+            user: params['userId'],
           };
         }
-        return this.loadProducts(filter);
+        return this.loadOrders(filter);
       })
     );
   }
 
   disconnect(): void {}
 
-  private getPagedData(data: Product[]): Product[] {
+  private getPagedData(data: Order[]): Order[] {
     if (this.paginator) {
       const startIndex = this.paginator.pageIndex * this.paginator.pageSize;
       return data.splice(startIndex, this.paginator?.pageSize);
@@ -73,7 +73,7 @@ export class ProductsDataSource extends DataSource<Product> {
     }
   }
 
-  private getSortedData(data: Product[]): Product[] {
+  private getSortedData(data: Order[]): Order[] {
     if (!this.sort || !this.sort.active || this.sort.direction === '') {
       return data;
     }
@@ -81,20 +81,14 @@ export class ProductsDataSource extends DataSource<Product> {
     return data.sort((a, b) => {
       const isAsc = this.sort?.direction === 'asc';
       switch (this.sort?.active) {
-        case 'name':
-          return compare(a.name, b.name, isAsc);
-        case 'price':
-          return compare(a.price, b.price, isAsc);
-        case 'description':
-          return compare(a.description!, b.description!, isAsc);
-        case 'category':
-          return compare(a.category?.name!, b.category?.name!, isAsc);
-        case 'article':
-          return compare(a.article!, b.article!, isAsc);
-        case 'stock':
-          return compare(a.stock!, b.stock!, isAsc);
-        case 'size':
-          return compare(a.size!, b.size!, isAsc);
+        case 'order':
+          return compare(a.order, b.order, isAsc);
+        case 'date':
+          return compare(a.date!, b.date!, isAsc);
+        case 'user':
+          return compare(a.user.email, b.user.email, isAsc);
+        case 'status':
+          return compare(a.status, b.status, isAsc);
         default:
           return 0;
       }
@@ -103,8 +97,8 @@ export class ProductsDataSource extends DataSource<Product> {
 }
 
 function compare(
-  a: string | number,
-  b: string | number,
+  a: string | number | boolean | Date,
+  b: string | number | boolean | Date,
   isAsc: boolean
 ): number {
   return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
