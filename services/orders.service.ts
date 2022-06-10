@@ -18,7 +18,6 @@ export class OrdersService {
         if (response.success) {
           return response.data;
         }
-        console.log(response);
         return [];
       }),
       first()
@@ -31,7 +30,6 @@ export class OrdersService {
         if (response.success) {
           return response.data;
         }
-        console.log(response);
         return [];
       }),
       first()
@@ -48,7 +46,6 @@ export class OrdersService {
           if (response.success && response.data instanceof Array) {
             return response.data;
           }
-          console.log(response.message);
           this.matService.openSnackBar(response.message);
           return [];
         }),
@@ -65,7 +62,6 @@ export class OrdersService {
           );
           return response.data;
         }
-        console.log(response.message);
         this.matService.openSnackBar(response.message);
         return response;
       })
@@ -109,7 +105,6 @@ export class OrdersService {
           );
           return response.data;
         }
-        console.log(response.message);
         this.matService.openSnackBar(response.message);
         return response;
       })

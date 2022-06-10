@@ -18,7 +18,6 @@ export class UsersService {
         if (response.success && response.data instanceof Array) {
           return response.data;
         }
-        console.log(response.message);
         this.matService.openSnackBar(response.message);
         return [];
       }),
@@ -35,7 +34,6 @@ export class UsersService {
           );
           return response.data;
         }
-        console.log(response.message);
         this.matService.openSnackBar(response.message);
         return response;
       })
@@ -79,7 +77,6 @@ export class UsersService {
           );
           return response.data;
         }
-        console.log(response.message);
         this.matService.openSnackBar(response.message);
         return response;
       })

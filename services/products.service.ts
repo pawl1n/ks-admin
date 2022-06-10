@@ -22,7 +22,6 @@ export class ProductsService {
           if (response.success && response.data instanceof Array) {
             return response.data;
           }
-          console.log(response.message);
           this.matService.openSnackBar(response.message);
           return [];
         }),
@@ -39,7 +38,6 @@ export class ProductsService {
           );
           return response.data;
         }
-        console.log(response.message);
         this.matService.openSnackBar(response.message);
         return response;
       })
@@ -83,7 +81,6 @@ export class ProductsService {
           );
           return response.data;
         }
-        console.log(response.message);
         this.matService.openSnackBar(response.message);
         return response;
       })

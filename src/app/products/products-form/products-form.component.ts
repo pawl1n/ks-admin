@@ -62,7 +62,6 @@ export class ProductsFormComponent implements OnInit {
         next: (product: Product | any) => {
           if (product && instanceofProduct(product)) {
             this.product = product;
-            console.log(product);
             this.form.patchValue({
               name: product.name,
               price: product.price,
@@ -149,9 +148,6 @@ export class ProductsFormComponent implements OnInit {
         formData.append('images[]', image);
       }
     });
-
-    console.log(formData.getAll('stock'));
-    console.log(formData.getAll('size'));
 
     this.products.update(this.product?._id!, formData).subscribe({
       next: (product: Product) => {
