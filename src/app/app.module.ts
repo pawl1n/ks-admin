@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { importProvidersFrom, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { MatPaginatorIntl } from '@angular/material/paginator';
@@ -22,6 +22,10 @@ import { UsersComponent } from './users/users.component';
 import { UsersFormComponent } from './users/users-form/users-form.component';
 import { OrdersComponent } from './orders/orders.component';
 import { OrdersFormComponent } from './orders/orders-form/orders-form.component';
+import { ProvidersComponent } from './providers/providers.component';
+import { ProvidersFormComponent } from './providers/providers-form/providers-form.component';
+import { PurchasesComponent } from './purchases/purchases.component';
+import { PurchasesFormComponent } from './purchases/purchases-form/purchases-form.component';
 
 import { MatSliderModule } from '@angular/material/slider';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -65,6 +69,10 @@ import { MatExpansionModule } from '@angular/material/expansion';
     UsersFormComponent,
     OrdersComponent,
     OrdersFormComponent,
+    ProvidersComponent,
+    ProvidersFormComponent,
+    PurchasesComponent,
+    PurchasesFormComponent,
   ],
   imports: [
     BrowserModule,

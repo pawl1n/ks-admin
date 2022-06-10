@@ -2,30 +2,30 @@ import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTable } from '@angular/material/table';
-import { OrdersDataSource } from './orders-datasource';
+import { PurchasesDataSource } from './purchases-datasource';
 import { ActivatedRoute, Router } from '@angular/router';
-import { OrdersService } from 'services/orders.service';
-import { Order } from 'interfaces/order';
+import { PurchasesService } from 'services/purchases.service';
+import { Purchase } from 'interfaces/purchase';
 
 @Component({
-  selector: 'app-orders',
-  templateUrl: './orders.component.html',
-  styleUrls: ['./orders.component.sass'],
+  selector: 'app-purchases',
+  templateUrl: './purchases.component.html',
+  styleUrls: ['./purchases.component.sass'],
 })
-export class OrdersComponent implements AfterViewInit {
+export class PurchasesComponent implements AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-  @ViewChild(MatTable) table!: MatTable<Order>;
-  dataSource: OrdersDataSource;
+  @ViewChild(MatTable) table!: MatTable<Purchase>;
+  dataSource: PurchasesDataSource;
 
-  displayedColumns = ['order', 'date', 'user', 'status'];
+  displayedColumns = ['number', 'date', 'provider'];
 
   constructor(
-    private ordersService: OrdersService,
+    private purchasesService: PurchasesService,
     private router: Router,
     private route: ActivatedRoute
   ) {
-    this.dataSource = new OrdersDataSource(ordersService, route);
+    this.dataSource = new PurchasesDataSource(purchasesService, route);
   }
 
   ngAfterViewInit(): void {
@@ -35,9 +35,9 @@ export class OrdersComponent implements AfterViewInit {
   }
 
   addNew() {
-    this.router.navigate(['orders/new'], {
+    this.router.navigate(['purchases/new'], {
       queryParams: {
-        userId: this.dataSource.userId,
+        providerId: this.dataSource.providerId,
       },
     });
   }

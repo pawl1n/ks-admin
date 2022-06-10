@@ -14,6 +14,10 @@ import { UsersComponent } from './users/users.component';
 import { UsersFormComponent } from './users/users-form/users-form.component';
 import { OrdersComponent } from './orders/orders.component';
 import { OrdersFormComponent } from './orders/orders-form/orders-form.component';
+import { ProvidersComponent } from './providers/providers.component';
+import { ProvidersFormComponent } from './providers/providers-form/providers-form.component';
+import { PurchasesComponent } from './purchases/purchases.component';
+import { PurchasesFormComponent } from './purchases/purchases-form/purchases-form.component';
 
 const routes: Routes = [
   {
@@ -137,7 +141,7 @@ const routes: Routes = [
             },
           },
           {
-            path: ':id',
+            path: ':userId',
             component: UsersFormComponent,
             title: 'Редагування клієнта',
             data: {
@@ -180,11 +184,67 @@ const routes: Routes = [
       },
       {
         path: 'purchases',
-        component: DashboardComponent,
         data: {
           breadcrumb: 'Закупки',
         },
-        title: 'Закупки',
+        children: [
+          {
+            path: '',
+            component: PurchasesComponent,
+            title: 'Закупки',
+            data: {
+              breadcrumb: '',
+            },
+          },
+          {
+            path: 'new',
+            component: PurchasesFormComponent,
+            title: 'Створення закупки',
+            data: {
+              breadcrumb: 'Створення закупки',
+            },
+          },
+          {
+            path: ':id',
+            component: PurchasesFormComponent,
+            title: 'Редагування закупки',
+            data: {
+              breadcrumb: 'Редагування закупки',
+            },
+          },
+        ],
+      },
+      {
+        path: 'providers',
+        data: {
+          breadcrumb: 'Постачальники',
+        },
+        children: [
+          {
+            path: '',
+            component: ProvidersComponent,
+            title: 'Постачальники',
+            data: {
+              breadcrumb: '',
+            },
+          },
+          {
+            path: 'new',
+            component: ProvidersFormComponent,
+            title: 'Додавання постачальника',
+            data: {
+              breadcrumb: 'Додавання постачальника',
+            },
+          },
+          {
+            path: ':providerId',
+            component: ProvidersFormComponent,
+            title: 'Редагування постачальника',
+            data: {
+              breadcrumb: 'Редагування постачальника',
+            },
+          },
+        ],
       },
       {
         path: 'logout',

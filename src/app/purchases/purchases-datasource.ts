@@ -2,39 +2,39 @@ import { DataSource } from '@angular/cdk/collections';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { map, merge, mergeAll, Observable, of, switchMap } from 'rxjs';
-import { OrdersService } from 'services/orders.service';
+import { PurchasesService } from 'services/purchases.service';
 import { ActivatedRoute, Params } from '@angular/router';
-import { Order } from 'interfaces/order';
+import { Purchase } from 'interfaces/purchase';
 
-export class OrdersDataSource extends DataSource<Order> {
-  orders: Order[];
+export class PurchasesDataSource extends DataSource<Purchase> {
+  purchases: Purchase[];
   paginator: MatPaginator | undefined;
   sort: MatSort | undefined;
   loading = true;
-  userId?: string;
+  providerId?: string;
 
   constructor(
-    private ordersService: OrdersService,
+    private purchasesService: PurchasesService,
     private route: ActivatedRoute
   ) {
     super();
-    this.orders = [];
+    this.purchases = [];
   }
 
-  loadOrders(filter: object): Observable<Order[]> {
+  loadPurchasaes(filter: object): Observable<Purchase[]> {
     this.loading = true;
-    return this.ordersService.get(filter).pipe(
-      map((orders) => {
+    return this.purchasesService.get(filter).pipe(
+      map((purchases) => {
         this.loading = false;
-        this.orders = orders;
+        this.purchases = purchases;
         if (this.paginator && this.sort) {
           return merge(
-            of(this.orders),
+            of(this.purchases),
             this.paginator!.page,
             this.sort!.sortChange
           ).pipe(
             map(() => {
-              return this.getPagedData(this.getSortedData([...this.orders]));
+              return this.getPagedData(this.getSortedData([...this.purchases]));
             })
           );
         } else {
@@ -47,24 +47,24 @@ export class OrdersDataSource extends DataSource<Order> {
     );
   }
 
-  connect(): Observable<Order[]> {
+  connect(): Observable<Purchase[]> {
     return this.route.params.pipe(
       switchMap((params: Params) => {
         let filter = {};
-        if (params['userId']) {
-          this.userId = params['userId'];
+        if (params['providerId']) {
+          this.providerId = params['providerId'];
           filter = {
-            user: params['userId'],
+            provider: params['providerId'],
           };
         }
-        return this.loadOrders(filter);
+        return this.loadPurchasaes(filter);
       })
     );
   }
 
   disconnect(): void {}
 
-  private getPagedData(data: Order[]): Order[] {
+  private getPagedData(data: Purchase[]): Purchase[] {
     if (this.paginator) {
       const startIndex = this.paginator.pageIndex * this.paginator.pageSize;
       return data.splice(startIndex, this.paginator?.pageSize);
@@ -73,7 +73,7 @@ export class OrdersDataSource extends DataSource<Order> {
     }
   }
 
-  private getSortedData(data: Order[]): Order[] {
+  private getSortedData(data: Purchase[]): Purchase[] {
     if (!this.sort || !this.sort.active || this.sort.direction === '') {
       return data;
     }
@@ -81,14 +81,12 @@ export class OrdersDataSource extends DataSource<Order> {
     return data.sort((a, b) => {
       const isAsc = this.sort?.direction === 'asc';
       switch (this.sort?.active) {
-        case 'order':
-          return compare(a.order, b.order, isAsc);
+        case 'number':
+          return compare(a.number, b.number, isAsc);
         case 'date':
           return compare(a.date!, b.date!, isAsc);
-        case 'user':
-          return compare(a.user.email, b.user.email, isAsc);
-        case 'status':
-          return compare(a.status, b.status, isAsc);
+        case 'provider':
+          return compare(a.provider.name, b.provider.name, isAsc);
         default:
           return 0;
       }

@@ -1,16 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatOptionSelectionChange } from '@angular/material/core';
 import { MatSelectChange } from '@angular/material/select';
-import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { Order } from 'interfaces/order';
+import { Purchase } from 'interfaces/purchase';
 import { Product } from 'interfaces/product';
-import { User } from 'interfaces/user';
+import { Provider } from 'interfaces/provider';
 import { of, switchMap } from 'rxjs';
-import { OrdersService } from 'services/orders.service';
+import { PurchasesService } from 'services/purchases.service';
 import { ProductsService } from 'services/products.service';
-import { UsersService } from 'services/users.service';
+import { ProvidersService } from 'services/providers.service';
 
 interface productsList {
   product: Product;
@@ -19,23 +17,21 @@ interface productsList {
 }
 
 @Component({
-  selector: 'app-orders-form',
-  templateUrl: './orders-form.component.html',
-  styleUrls: ['./orders-form.component.sass'],
+  selector: 'app-purchases-form',
+  templateUrl: './purchases-form.component.html',
+  styleUrls: ['./purchases-form.component.sass'],
 })
-export class OrdersFormComponent implements OnInit {
+export class PurchasesFormComponent implements OnInit {
   form!: FormGroup;
   isNew = true;
-  order?: Order;
-  users: User[] = [];
+  purchase?: Purchase;
+  providers: Provider[] = [];
   products: Product[] = [];
-  statuses: Array<string> = [];
-  methods: string[] = [];
   totalPrice: number = 0;
 
   constructor(
-    private ordersService: OrdersService,
-    private usersService: UsersService,
+    private purchasesService: PurchasesService,
+    private providersService: ProvidersService,
     private productsService: ProductsService,
     private router: Router,
     private route: ActivatedRoute
@@ -43,19 +39,9 @@ export class OrdersFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = new FormGroup({
-      order: new FormControl(''),
+      number: new FormControl(''),
       date: new FormControl(''),
-      user: new FormControl('', [Validators.required]),
-      status: new FormControl(''),
-      shipping: new FormGroup({
-        city: new FormControl(''),
-        postal: new FormControl(''),
-        // street: new FormControl(''),
-        // building: new FormControl(''),
-        department: new FormControl(''),
-        shippingMethod: new FormControl(''),
-        phone: new FormControl(''),
-      }),
+      provider: new FormControl(''),
       list: new FormArray([]),
     });
 
@@ -66,23 +52,21 @@ export class OrdersFormComponent implements OnInit {
         switchMap((params: Params) => {
           if (params['id']) {
             this.isNew = false;
-            return this.ordersService.getById(params['id']);
+            return this.purchasesService.getById(params['id']);
           } else {
             return of(null);
           }
         })
       )
       .subscribe({
-        next: (order: User | any) => {
-          if (order) {
-            this.order = order;
-            this.form.patchValue(order);
-            this.form.get('shipping')?.patchValue(order.shipping);
+        next: (purchase: Purchase | any) => {
+          if (purchase) {
+            this.purchase = purchase;
+            this.form.patchValue(purchase);
             this.form.patchValue({
-              user: order.user._id,
+              provider: purchase.provider?._id,
             });
-            // this.productList = [...order.list];
-            order.list.forEach((item: productsList) => {
+            purchase.list.forEach((item: productsList) => {
               this.addProduct(item.product, item.quantity, item.cost);
             });
           }
@@ -92,29 +76,17 @@ export class OrdersFormComponent implements OnInit {
 
     this.route.queryParams.subscribe({
       next: (params: Params) => {
-        if (params['userId']) {
+        if (params['providerId']) {
           this.form.patchValue({
-            user: params['userId'],
+            provider: params['providerId'],
           });
         }
       },
     });
 
-    this.usersService.get().subscribe({
-      next: (users: User[]) => {
-        this.users = users;
-      },
-    });
-
-    this.ordersService.getStatuses().subscribe({
-      next: (statuses: string[]) => {
-        this.statuses = statuses;
-      },
-    });
-
-    this.ordersService.getMethods().subscribe({
-      next: (methods: string[]) => {
-        this.methods = methods;
+    this.providersService.get().subscribe({
+      next: (providers: Provider[]) => {
+        this.providers = providers;
       },
     });
 
@@ -135,9 +107,9 @@ export class OrdersFormComponent implements OnInit {
 
   create() {
     this.form.disable();
-    this.ordersService.create(this.form.value).subscribe({
+    this.purchasesService.create(this.form.value).subscribe({
       next: () => {
-        this.router.navigate(['/orders']);
+        this.router.navigate(['/purchases']);
       },
       error: () => {
         this.form.enable();
@@ -147,15 +119,17 @@ export class OrdersFormComponent implements OnInit {
 
   update() {
     this.form.disable();
-    this.ordersService.update(this.order?._id!, this.form.value).subscribe({
-      next: (order: Order) => {
-        this.order = order;
-        this.form.enable();
-      },
-      error: () => {
-        this.form.enable();
-      },
-    });
+    this.purchasesService
+      .update(this.purchase?._id!, this.form.value)
+      .subscribe({
+        next: (purchase: Purchase) => {
+          this.purchase = purchase;
+          this.form.enable();
+        },
+        error: () => {
+          this.form.enable();
+        },
+      });
   }
 
   delete() {
@@ -163,13 +137,13 @@ export class OrdersFormComponent implements OnInit {
       return;
     }
     const decision = window.confirm(
-      `Ви впевнені, що бажаєте видалити замовлення "${this.order?.order}"?`
+      `Ви впевнені, що бажаєте видалити закупку №${this.purchase?.number}?`
     );
     if (decision) {
-      this.ordersService.delete(this.order?._id!).subscribe({
+      this.purchasesService.delete(this.purchase?._id!).subscribe({
         next: (deleted: Boolean) => {
           if (deleted) {
-            this.router.navigate(['orders']);
+            this.router.navigate(['purchases']);
           }
         },
       });

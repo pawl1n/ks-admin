@@ -12,11 +12,15 @@
     </mat-toolbar>
     <div class="table-wrapper">
       <table mat-table class="full-width-table" matSort>
-        <!-- Order Column -->
-        <ng-container matColumnDef="order">
+        <!-- Number Column -->
+        <ng-container matColumnDef="number">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Номер</th>
-          <td *matCellDef="let row" [routerLink]="row._id" class="clickable">
-            {{ row.order }}
+          <td
+            *matCellDef="let row"
+            [routerLink]="'/purchases/' + row._id"
+            class="clickable"
+          >
+            {{ row.number }}
           </td>
         </ng-container>
         <!-- Date Column -->
@@ -26,22 +30,21 @@
             {{ row.date }}
           </td>
         </ng-container>
-        <!-- User Column -->
-        <ng-container matColumnDef="user">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Клієнт</th>
+        <!-- Provider Column -->
+        <ng-container matColumnDef="provider">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            Постачальник
+          </th>
           <td
             *matCellDef="let row"
-            [routerLink]="'/users/' + row.user._id"
+            [routerLink]="
+              row.provider?._id
+                ? '/providers/' + row.provider?._id
+                : '/purchases/'
+            "
             class="clickable"
           >
-            {{ row.user?.name }}
-          </td>
-        </ng-container>
-        <!-- Status Column -->
-        <ng-container matColumnDef="status">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Статус</th>
-          <td *matCellDef="let row">
-            {{ row.status }}
+            {{ row.provider?.name }}
           </td>
         </ng-container>
 
@@ -52,7 +55,7 @@
 
     <mat-paginator
       #paginator
-      [length]="dataSource?.orders?.length"
+      [length]="dataSource?.purchases?.length"
       [pageIndex]="0"
       [pageSize]="10"
       [pageSizeOptions]="[5, 10, 20]"

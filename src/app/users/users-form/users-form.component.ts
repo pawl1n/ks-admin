@@ -24,7 +24,7 @@ export class UsersFormComponent implements OnInit {
   ngOnInit(): void {
     this.form = new FormGroup({
       email: new FormControl('', [Validators.required, Validators.email]),
-      name: new FormControl(''),
+      name: new FormControl('', [Validators.required]),
       phone: new FormControl(''),
       isAdmin: new FormControl(''),
     });
@@ -34,9 +34,9 @@ export class UsersFormComponent implements OnInit {
     this.route.params
       .pipe(
         switchMap((params: Params) => {
-          if (params['id']) {
+          if (params['userId']) {
             this.isNew = false;
-            return this.usersService.getById(params['id']);
+            return this.usersService.getById(params['userId']);
           } else {
             return of(null);
           }
@@ -75,7 +75,6 @@ export class UsersFormComponent implements OnInit {
 
   update() {
     this.form.disable();
-    console.log(this.form.value);
 
     this.usersService.update(this.user?._id!, this.form.value).subscribe({
       next: (user: User) => {
@@ -96,6 +95,12 @@ export class UsersFormComponent implements OnInit {
     } else return '';
   }
 
+  getNameError() {
+    if (this.form.get('name')?.hasError('required')) {
+      return 'Необхідно ввести імʼя';
+    } else return '';
+  }
+
   delete() {
     if (this.form.disabled) {
       return;
@@ -107,7 +112,7 @@ export class UsersFormComponent implements OnInit {
       this.usersService.delete(this.user?._id!).subscribe({
         next: (deleted: Boolean) => {
           if (deleted) {
-            this.router.navigate(['products']);
+            this.router.navigate(['users']);
           }
         },
       });

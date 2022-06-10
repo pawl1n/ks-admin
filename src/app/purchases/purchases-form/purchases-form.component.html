@@ -10,67 +10,19 @@
 
           <mat-form-field appearance="fill">
             <mat-label>Номер</mat-label>
-            <input matInput formControlName="order" readonly />
+            <input matInput formControlName="number" readonly />
           </mat-form-field>
           <mat-form-field appearance="fill">
             <mat-label>Дата</mat-label>
             <input matInput formControlName="date" readonly />
           </mat-form-field>
           <mat-form-field>
-            <mat-label>Клієнт</mat-label>
-            <mat-select formControlName="user" required>
-              <mat-option *ngFor="let item of users" [value]="item._id">
-                {{ item.name ? item.name : item.email }}
+            <mat-label>Постачальник</mat-label>
+            <mat-select formControlName="provider">
+              <mat-option *ngFor="let item of providers" [value]="item._id">
+                {{ item.name }}
               </mat-option>
             </mat-select>
-          </mat-form-field>
-          <mat-form-field>
-            <mat-label>Статус</mat-label>
-            <mat-select formControlName="status">
-              <mat-option *ngFor="let item of statuses" [value]="item">
-                {{ item }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-        </mat-expansion-panel>
-
-        <mat-expansion-panel [formGroup]="$any(form.controls['shipping'])">
-          <mat-expansion-panel-header>
-            <mat-panel-title> Доставка </mat-panel-title>
-            <mat-panel-description></mat-panel-description>
-          </mat-expansion-panel-header>
-
-          <mat-form-field>
-            <mat-label>Місто</mat-label>
-            <input matInput formControlName="city" />
-          </mat-form-field>
-          <mat-form-field>
-            <mat-label>Поштовий код</mat-label>
-            <input matInput formControlName="postal" />
-          </mat-form-field>
-          <!-- <mat-form-field>
-            <mat-label>Вулиця</mat-label>
-            <input matInput formControlName="street" />
-          </mat-form-field>
-          <mat-form-field>
-            <mat-label>Будинок</mat-label>
-            <input matInput formControlName="building" />
-          </mat-form-field> -->
-          <mat-form-field>
-            <mat-label>Відділ</mat-label>
-            <input matInput formControlName="department" />
-          </mat-form-field>
-          <mat-form-field>
-            <mat-label>Метод доставки</mat-label>
-            <mat-select formControlName="shippingMethod">
-              <mat-option *ngFor="let item of methods" [value]="item">
-                {{ item }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field>
-            <mat-label>Телефон</mat-label>
-            <input matInput formControlName="phone" />
           </mat-form-field>
         </mat-expansion-panel>
 
@@ -90,7 +42,7 @@
                 <mat-grid-tile></mat-grid-tile>
               </div>
 
-              <div [formGroup]="form" class="product-list">
+              <div class="product-list">
                 <ng-container formArrayName="list">
                   <ng-container
                     *ngFor="

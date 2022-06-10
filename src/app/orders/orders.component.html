@@ -15,7 +15,11 @@
         <!-- Order Column -->
         <ng-container matColumnDef="order">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Номер</th>
-          <td *matCellDef="let row" [routerLink]="row._id" class="clickable">
+          <td
+            *matCellDef="let row"
+            [routerLink]="'/orders/' + row._id"
+            class="clickable"
+          >
             {{ row.order }}
           </td>
         </ng-container>

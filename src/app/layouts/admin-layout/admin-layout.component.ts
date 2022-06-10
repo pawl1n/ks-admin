@@ -77,7 +77,12 @@ export const ROUTES: RouteInfo[] = [
   },
   {
     path: '/purchases',
-    title: 'Закупівля',
+    title: 'Закупки',
     icon: 'shopping_cart',
+  },
+  {
+    path: '/providers',
+    title: 'Постачальники',
+    icon: 'group',
   },
 ];
