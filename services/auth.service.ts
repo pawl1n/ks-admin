@@ -36,11 +36,27 @@ export class AuthService {
     return this.token;
   }
   isAuthenticated(): boolean {
-    return !!this.token;
+    if (this.token) {
+      try {
+        const tokenDecode = JSON.parse(window.atob(this.token.split('.')[1]));
+        console.log(tokenDecode);
+        if (tokenDecode.isAdmin && !this._tokenExpired(tokenDecode.exp)) {
+          return true;
+        }
+      } catch (error) {
+        console.error(error);
+        return false;
+      }
+    }
+    return false;
   }
   logout() {
     this.setToken('');
     localStorage.clear();
     this.router.navigate(['login']);
+  }
+
+  private _tokenExpired(expiration: number): boolean {
+    return Math.floor(new Date().getTime() / 1000) >= expiration;
   }
 }
