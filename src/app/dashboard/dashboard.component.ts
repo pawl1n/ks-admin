@@ -134,7 +134,6 @@ export class DashboardComponent implements OnInit {
         for (let i = 0; i <= 31; i++) {
           let date = new Date(Date.now() - 1000 * 3600 * 24 * (31 - i));
           let item = this.ordersDataByMonth.find((item) => {
-            console.log(date.getDate());
             return (
               item._id.dayOfMonth == date.getDate() &&
               item._id.month == date.getMonth() + 1
@@ -143,7 +142,6 @@ export class DashboardComponent implements OnInit {
 
           chartData.push(item?.count ? item.count : 0);
           labels.push('' + date.getDate());
-          // console.log(chartData);
         }
         this.drawChart(labels, chartData);
       },

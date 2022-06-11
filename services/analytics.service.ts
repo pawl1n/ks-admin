@@ -15,10 +15,8 @@ export class AnalyticsService {
     return this.http.get<Response>(this.path + 'overview').pipe(
       map((response: Response) => {
         if (response.success && response.data) {
-          console.log(response.data);
           return response.data;
         }
-        console.log(response);
         this.matService.openSnackBar(response.message);
         return;
       }),
