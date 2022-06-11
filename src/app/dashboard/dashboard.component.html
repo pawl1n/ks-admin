@@ -1,32 +1,71 @@
 <div class="grid-container">
-  <mat-grid-list cols="2" rowHeight="350px">
-    <mat-grid-tile
-      *ngFor="let card of cards | async"
-      [colspan]="card.cols"
-      [rowspan]="card.rows"
+  <mat-grid-list cols="4" rowHeight="125px">
+    <mat-grid-tile [colspan]="colspan"
+      ><div class="dashboard-card">
+        <mat-card
+          ><mat-card-header
+            ><mat-card-title>Всього товарів </mat-card-title></mat-card-header
+          >
+          <mat-card-content>
+            <h1>{{ productsCount }}</h1>
+          </mat-card-content></mat-card
+        >
+      </div></mat-grid-tile
     >
-      <mat-card class="dashboard-card">
-        <mat-card-header>
-          <mat-card-title>
-            {{ card.title }}
-            <button
-              mat-icon-button
-              class="more-button"
-              [matMenuTriggerFor]="menu"
-              aria-label="Toggle menu"
-            >
-              <mat-icon>more_vert</mat-icon>
-            </button>
-            <mat-menu #menu="matMenu" xPosition="before">
-              <button mat-menu-item>Expand</button>
-              <button mat-menu-item>Remove</button>
-            </mat-menu>
-          </mat-card-title>
-        </mat-card-header>
-        <mat-card-content class="dashboard-card-content">
-          <div>Card Content Here</div>
-        </mat-card-content>
-      </mat-card>
-    </mat-grid-tile>
+
+    <mat-grid-tile [colspan]="colspan"
+      ><div class="dashboard-card">
+        <mat-card
+          ><mat-card-header
+            ><mat-card-title>Всього замовлень </mat-card-title></mat-card-header
+          >
+          <mat-card-content>
+            <h1>{{ ordersCount }}</h1>
+          </mat-card-content></mat-card
+        >
+      </div></mat-grid-tile
+    >
+
+    <mat-grid-tile [colspan]="colspan"
+      ><div class="dashboard-card">
+        <mat-card
+          ><mat-card-header
+            ><mat-card-title>Прибуток</mat-card-title></mat-card-header
+          >
+          <mat-card-content>
+            <h1>{{ revenue }} грн.</h1>
+          </mat-card-content></mat-card
+        >
+      </div></mat-grid-tile
+    >
+    <mat-grid-tile [colspan]="colspan"
+      ><div class="dashboard-card">
+        <mat-card
+          ><mat-card-header
+            ><mat-card-title
+              >Нових користувачів</mat-card-title
+            ></mat-card-header
+          >
+          <mat-card-content>
+            <h1>{{ usersCount }}</h1>
+          </mat-card-content></mat-card
+        >
+      </div></mat-grid-tile
+    >
+
+    <mat-grid-tile [colspan]="colspanChart" [rowspan]="rowspanChart"
+      ><div class="dashboard-card">
+        <mat-card
+          ><mat-card-header
+            ><mat-card-title
+              >Графік замовлень за 30 днів</mat-card-title
+            ></mat-card-header
+          >
+          <mat-card-content>
+            <div id="chart-wrapper">
+              <canvas id="chart"></canvas>
+            </div> </mat-card-content
+        ></mat-card></div
+    ></mat-grid-tile>
   </mat-grid-list>
 </div>

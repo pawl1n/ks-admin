@@ -6,7 +6,7 @@ export interface Purchase {
   date?: string;
   number: number;
   status: string;
-  list?: [
+  list: [
     {
       product: Product;
       quantity: number;

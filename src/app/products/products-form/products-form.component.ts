@@ -6,7 +6,6 @@ import { instanceofProduct, Product } from 'interfaces/product';
 import { of, switchMap } from 'rxjs';
 import { CategoriesService } from 'services/categories.service';
 import { ProductsService } from 'services/products.service';
-import { MaterialService } from 'src/app/ui/material.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -26,7 +25,6 @@ export class ProductsFormComponent implements OnInit {
   constructor(
     private products: ProductsService,
     private router: Router,
-    private matService: MaterialService,
     private route: ActivatedRoute,
     private categoriesService: CategoriesService
   ) {}
@@ -80,12 +78,8 @@ export class ProductsFormComponent implements OnInit {
     this.route.queryParams.subscribe({
       next: (params: Params) => {
         if (params['categoryId']) {
-          this.categoriesService.getById(params['categoryId']).subscribe({
-            next: (category: Category) => {
-              this.form.patchValue({
-                category: category,
-              });
-            },
+          this.form.patchValue({
+            category: params['categoryId'],
           });
         }
       },

@@ -81,7 +81,6 @@ export class OrdersFormComponent implements OnInit {
             this.form.patchValue({
               user: order.user._id,
             });
-            // this.productList = [...order.list];
             order.list.forEach((item: productsList) => {
               this.addProduct(item.product, item.quantity, item.cost);
             });
@@ -149,7 +148,6 @@ export class OrdersFormComponent implements OnInit {
     this.form.disable();
     this.ordersService.update(this.order?._id!, this.form.value).subscribe({
       next: (order: Order) => {
-        this.order = order;
         this.form.enable();
       },
       error: () => {

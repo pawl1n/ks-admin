@@ -23,7 +23,7 @@ export class UsersFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = new FormGroup({
-      email: new FormControl('', [Validators.required, Validators.email]),
+      email: new FormControl('', [Validators.email]),
       name: new FormControl('', [Validators.required]),
       phone: new FormControl(''),
       isAdmin: new FormControl(''),

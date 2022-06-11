@@ -86,7 +86,7 @@ export class OrdersDataSource extends DataSource<Order> {
         case 'date':
           return compare(a.date!, b.date!, isAsc);
         case 'user':
-          return compare(a.user.email, b.user.email, isAsc);
+          return compare(a.user.email!, b.user.email!, isAsc);
         case 'status':
           return compare(a.status, b.status, isAsc);
         default:

@@ -7,7 +7,7 @@ export interface Order {
   date?: string;
   order: number;
   status: string;
-  list?: [
+  list: [
     {
       product: Product;
       quantity: number;

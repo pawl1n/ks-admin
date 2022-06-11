@@ -7,7 +7,6 @@
           matInput
           placeholder="example@gmail.com"
           [formControlName]="'email'"
-          required
         />
         <mat-error *ngIf="form.get('email')?.invalid">{{
           getEmailError()

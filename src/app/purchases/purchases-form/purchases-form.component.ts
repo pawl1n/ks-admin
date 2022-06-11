@@ -123,7 +123,6 @@ export class PurchasesFormComponent implements OnInit {
       .update(this.purchase?._id!, this.form.value)
       .subscribe({
         next: (purchase: Purchase) => {
-          this.purchase = purchase;
           this.form.enable();
         },
         error: () => {

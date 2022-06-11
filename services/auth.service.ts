@@ -39,12 +39,10 @@ export class AuthService {
     if (this.token) {
       try {
         const tokenDecode = JSON.parse(window.atob(this.token.split('.')[1]));
-        console.log(tokenDecode);
         if (tokenDecode.isAdmin && !this._tokenExpired(tokenDecode.exp)) {
           return true;
         }
       } catch (error) {
-        console.error(error);
         return false;
       }
     }

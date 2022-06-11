@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AuthService } from 'services/auth.service';
 import { MaterialService } from 'src/app/ui/material.service';
@@ -12,21 +12,11 @@ import { MaterialService } from 'src/app/ui/material.service';
 })
 export class RegisterComponent implements OnInit, OnDestroy {
   hide = true;
-  email = new FormControl('', [Validators.required, Validators.email]);
-  password = new FormControl(
-    '',
-    Validators.compose([
-      Validators.minLength(5),
-      Validators.required,
-      Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9]+$'),
-    ])
-  );
   form!: FormGroup;
   aSub!: Subscription;
 
   constructor(
     private auth: AuthService,
-    private route: ActivatedRoute,
     private router: Router,
     private matService: MaterialService
   ) {}
@@ -39,6 +29,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
         Validators.required,
         Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9]+$'),
       ]),
+      name: new FormControl('', [Validators.required]),
     });
   }
   ngOnDestroy(): void {
@@ -52,6 +43,11 @@ export class RegisterComponent implements OnInit, OnDestroy {
       return 'Необхідно ввести адресу електронної пошти';
     } else if (this.form.get('email')?.hasError('email')) {
       return 'Неправильно введено адресу електронної пошти';
+    } else return '';
+  }
+  getNameErrorMessage() {
+    if (this.form.get('email')?.hasError('required')) {
+      return 'Необхідно ввести імʼя пошти';
     } else return '';
   }
   getPasswordErrorMessage() {
