@@ -4,12 +4,13 @@ import { first, map, Observable } from 'rxjs';
 import { Response } from 'interfaces/response';
 import { User } from 'interfaces/user';
 import { MaterialService } from '../src/app/ui/material.service';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UsersService {
-  private path = '/api/users/';
+  private path = environment.serverUrl + '/api/users/';
   constructor(private http: HttpClient, private matService: MaterialService) {}
 
   get(): Observable<User[]> {

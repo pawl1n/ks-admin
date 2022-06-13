@@ -4,12 +4,13 @@ import { first, map, Observable, of } from 'rxjs';
 import { Response } from 'interfaces/response';
 import { Purchase } from 'interfaces/purchase';
 import { MaterialService } from '../src/app/ui/material.service';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PurchasesService {
-  private path = '/api/purchases/';
+  private path = environment.serverUrl + '/api/purchases/';
   constructor(private http: HttpClient, private matService: MaterialService) {}
 
   get(filter = {}): Observable<Purchase[]> {

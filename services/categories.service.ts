@@ -4,12 +4,13 @@ import { first, map, Observable } from 'rxjs';
 import { Response } from 'interfaces/response';
 import { Category, instanceofCategory } from 'interfaces/category';
 import { MaterialService } from '../src/app/ui/material.service';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CategoriesService {
-  private path = '/api/categories/';
+  private path = environment.serverUrl + '/api/categories/';
   constructor(private http: HttpClient, private matService: MaterialService) {}
 
   get(): Observable<Category[]> {

@@ -229,7 +229,7 @@ export class ProductsFormComponent implements OnInit {
 
   getSrc(image: string | ArrayBuffer) {
     if (typeof image == 'string' && image.startsWith('uploads')) {
-      return environment.serverUrl + image;
+      return environment.serverUrl + '/' + image;
     }
     return image;
   }

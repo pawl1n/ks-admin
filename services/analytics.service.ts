@@ -3,12 +3,13 @@ import { HttpClient } from '@angular/common/http';
 import { first, map, Observable } from 'rxjs';
 import { Response } from 'interfaces/response';
 import { MaterialService } from '../src/app/ui/material.service';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AnalyticsService {
-  private path = '/api/analytics/';
+  private path = environment.serverUrl + '/api/analytics/';
   constructor(private http: HttpClient, private matService: MaterialService) {}
 
   overview(): Observable<any> {
