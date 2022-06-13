@@ -79,7 +79,7 @@ export class OrdersFormComponent implements OnInit {
             this.form.patchValue(order);
             this.form.get('shipping')?.patchValue(order.shipping);
             this.form.patchValue({
-              user: order.user._id,
+              user: order.user?._id,
             });
             order.list.forEach((item: productsList) => {
               this.addProduct(item.product, item.quantity, item.cost);

@@ -58,22 +58,6 @@ Chart.register(
   Tooltip
 );
 
-// const months = [
-//   '',
-//   'Січень',
-//   'Лютий',
-//   'Березень',
-//   'Квітень',
-//   'Травень',
-//   'Червень',
-//   'Липень',
-//   'Серпень',
-//   'Вересень',
-//   'Жовтень',
-//   'Листопад',
-//   'Грудень',
-// ];
-
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',

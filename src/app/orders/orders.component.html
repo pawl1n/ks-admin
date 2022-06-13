@@ -35,7 +35,7 @@
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Клієнт</th>
           <td
             *matCellDef="let row"
-            [routerLink]="'/users/' + row.user._id"
+            [routerLink]="'/users/' + row.user?._id"
             class="clickable"
           >
             {{ row.user?.name }}
