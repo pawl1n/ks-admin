@@ -128,9 +128,7 @@ export class ProductsFormComponent implements OnInit {
     let formData = new FormData();
     Object.keys(this.form.value).map((key: string) => {
       let value = this.form.value[key as keyof FormGroup];
-      if (value) {
-        formData.append(key, value);
-      }
+      formData.append(key, value == undefined ? '' : value);
     });
     this.files.map((file: File) => {
       formData.append('files', file, file.name);

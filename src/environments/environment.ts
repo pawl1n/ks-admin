@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  serverUrl: 'https://kishka-strybaie.herokuapp.com',
+  serverUrl: 'http://192.168.31.186:3000',
 };
 
 /*
