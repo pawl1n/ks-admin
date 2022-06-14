@@ -17,4 +17,4 @@ jobs:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_KISHKA_STRYBAIE }}'
           channelId: live
-          projectId: kishka-strybaie
+          projectId: kishka-strybaie-admin
