@@ -10,6 +10,7 @@ export interface Product {
   article?: string;
   stock?: number;
   size?: string;
+  type?: string;
 }
 
 export function instanceofProduct(object: any) {

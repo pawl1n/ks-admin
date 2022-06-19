@@ -87,4 +87,18 @@ export class ProductsService {
       })
     );
   }
+
+  getTypes(): Observable<any> {
+    return this.http.get<Response>(this.path + 'get/types').pipe(
+      map((response: Response) => {
+        if (response.success) {
+          return response.data;
+        } else {
+          this.matService.openSnackBar(response.message);
+          return response;
+        }
+      }),
+      first()
+    );
+  }
 }

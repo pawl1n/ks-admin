@@ -20,6 +20,7 @@ export class ProductsFormComponent implements OnInit {
   categories: Category[] = [];
   imagePreviews: Array<string | ArrayBuffer> = [];
   files: File[] = [];
+  types: string[] = [];
   @ViewChild('input') inputRef!: ElementRef;
 
   constructor(
@@ -40,6 +41,7 @@ export class ProductsFormComponent implements OnInit {
       article: new FormControl(''),
       category: new FormControl('', [Validators.required]),
       stock: new FormControl('', [Validators.pattern('\\d+')]),
+      type: new FormControl('', [Validators.required]),
       size: new FormControl(''),
     });
 
@@ -68,6 +70,7 @@ export class ProductsFormComponent implements OnInit {
               category: product.category._id,
               stock: product.stock,
               size: product.size,
+              type: product.type,
             });
             this.imagePreviews = [...product.images];
           }
@@ -88,6 +91,12 @@ export class ProductsFormComponent implements OnInit {
     this.categoriesService.get().subscribe({
       next: (categories: Category[]) => {
         this.categories = categories;
+      },
+    });
+
+    this.products.getTypes().subscribe({
+      next: (types: string[]) => {
+        this.types = types;
       },
     });
   }

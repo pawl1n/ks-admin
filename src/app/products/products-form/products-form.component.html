@@ -49,6 +49,14 @@
         <mat-label>Розмір</mat-label>
         <input matInput [formControlName]="'size'" />
       </mat-form-field>
+      <mat-form-field>
+        <mat-label>Тип</mat-label>
+        <mat-select [formControlName]="'type'" required>
+          <mat-option *ngFor="let item of types" [value]="item">
+            {{ item }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
       <div class="mat-form-field">
         <label>Зображення</label>
         <input
@@ -93,7 +101,8 @@
               product?.article == form.value.article &&
               product?.category?._id == form.value.category &&
               product?.stock == form.value.stock &&
-              product?.size == form.value.size)
+              product?.size == form.value.size &&
+              product?.type == form.value.type)
           "
           class="save"
         >
