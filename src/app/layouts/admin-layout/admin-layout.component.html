@@ -8,10 +8,24 @@
     [opened]="(isHandset$ | async) === false"
   >
     <!-- <mat-toolbar>kishka.strybaie</mat-toolbar> -->
-    <mat-toolbar>Кішка стрибає</mat-toolbar>
+    <mat-toolbar>
+      <button
+        type="button"
+        mat-icon-button
+        (click)="drawer.toggle()"
+        *ngIf="isHandset$ | async"
+      >
+        <mat-icon>menu</mat-icon>
+      </button>
+      Кішка стрибає
+    </mat-toolbar>
     <mat-nav-list>
       <li mat-list-item *ngFor="let menuItem of menuItems">
-        <a routerLinkActive="active" [routerLink]="[menuItem.path]">
+        <a
+          routerLinkActive="active"
+          [routerLink]="[menuItem.path]"
+          (click)="drawer.toggle()"
+        >
           <mat-icon>{{ menuItem.icon }}</mat-icon>
           <p>{{ menuItem.title }}</p>
         </a>
