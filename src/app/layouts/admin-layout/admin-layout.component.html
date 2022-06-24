@@ -21,11 +21,7 @@
     </mat-toolbar>
     <mat-nav-list>
       <li mat-list-item *ngFor="let menuItem of menuItems">
-        <a
-          routerLinkActive="active"
-          [routerLink]="[menuItem.path]"
-          (click)="drawer.toggle()"
-        >
+        <a routerLinkActive="active" [routerLink]="[menuItem.path]">
           <mat-icon>{{ menuItem.icon }}</mat-icon>
           <p>{{ menuItem.title }}</p>
         </a>
