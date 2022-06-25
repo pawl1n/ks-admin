@@ -1,5 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormArray,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { MatSelectChange } from '@angular/material/select';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Purchase } from 'interfaces/purchase';
@@ -9,6 +15,9 @@ import { of, switchMap } from 'rxjs';
 import { PurchasesService } from 'services/purchases.service';
 import { ProductsService } from 'services/products.service';
 import { ProvidersService } from 'services/providers.service';
+import { MatDialog } from '@angular/material/dialog';
+import { ProductsComponent } from 'src/app/products/products.component';
+import { MaterialService } from 'src/app/ui/material.service';
 
 interface productsList {
   product: Product;
@@ -34,14 +43,16 @@ export class PurchasesFormComponent implements OnInit {
     private providersService: ProvidersService,
     private productsService: ProductsService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private dialog: MatDialog,
+    private matService: MaterialService
   ) {}
 
   ngOnInit(): void {
     this.form = new FormGroup({
       number: new FormControl(''),
       date: new FormControl(''),
-      provider: new FormControl(''),
+      provider: new FormControl('', Validators.required),
       list: new FormArray([]),
     });
 
@@ -94,6 +105,29 @@ export class PurchasesFormComponent implements OnInit {
       next: (products: Product[]) => {
         this.products = products;
       },
+    });
+  }
+
+  openDialog(event: Event, i: number) {
+    event.stopPropagation();
+    const dialogRef = this.dialog.open(ProductsComponent, {
+      data: {
+        isDialog: true,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        let product = this.products.find((product) => product._id == result);
+        if (product) {
+          this.productList.at(i).patchValue({
+            product: result,
+          });
+          this.onProductChange(undefined, i, product);
+        } else {
+          this.matService.openSnackBar('Виникла помилка при обиранні товару');
+        }
+      }
     });
   }
 
@@ -151,13 +185,17 @@ export class PurchasesFormComponent implements OnInit {
 
   addProduct(
     product: Product | null = null,
-    quantity: number | null = null,
+    quantity: number = 1,
     cost: number | null = null
   ) {
     const productForm = new FormGroup({
       product: new FormControl(product?._id, [Validators.required]),
-      quantity: new FormControl(quantity, [Validators.required]),
-      cost: new FormControl(cost, [Validators.required]),
+      quantity: new FormControl(quantity, [
+        Validators.required,
+        Validators.max(product?.stock ?? 1),
+        Validators.min(1),
+      ]),
+      cost: new FormControl(cost, [Validators.required, Validators.min(0)]),
       article: new FormControl(product?.article),
       size: new FormControl(product?.size),
     });
@@ -166,14 +204,29 @@ export class PurchasesFormComponent implements OnInit {
     this.calculateTotalPrice();
   }
 
-  onProductChange(event: MatSelectChange, i: number) {
-    let product = this.products.find((product) => {
-      return product._id == event.source.value;
-    });
+  onProductChange(
+    event: MatSelectChange | undefined = undefined,
+    i: number,
+    product: Product | undefined = undefined
+  ) {
+    if (event instanceof MatSelectChange) {
+      product = this.products.find((product) => {
+        return product._id == event.source.value;
+      });
+    }
     this.productList.at(i).patchValue({
       article: product?.article,
       size: product?.size,
     });
+    this.productList
+      .at(i)
+      .get('quantity')
+      ?.setValidators([
+        Validators.required,
+        Validators.max(product?.stock ?? 1),
+        Validators.min(1),
+      ]);
+    this.productList.at(i).get('quantity')?.updateValueAndValidity();
     this.productList.at(i).updateValueAndValidity();
   }
 

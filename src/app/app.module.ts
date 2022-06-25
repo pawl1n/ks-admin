@@ -50,6 +50,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   declarations: [
@@ -102,6 +104,8 @@ import { MatExpansionModule } from '@angular/material/expansion';
     MatDatepickerModule,
     MatTooltipModule,
     MatExpansionModule,
+    MatAutocompleteModule,
+    MatDialogModule,
   ],
   providers: [
     {
