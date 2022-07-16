@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { ActivatedRoute, Params, Router } from '@angular/router';
@@ -148,29 +148,6 @@ export class PurchasesFormComponent implements OnInit {
           this.productListDataSource.next(list);
         }
       },
-    });
-  }
-
-  openDialog(event: Event, i: number) {
-    event.stopPropagation();
-    const dialogRef = this.dialog.open(ProductsComponent, {
-      data: {
-        isDialog: true,
-      },
-    });
-
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        let product = this.products.find((product) => product._id == result);
-        if (product) {
-          this.productList.at(i).patchValue({
-            product: result,
-          });
-          this.onProductChange(undefined, i, product);
-        } else {
-          this.matService.openSnackBar('Виникла помилка при обиранні товару');
-        }
-      }
     });
   }
 
