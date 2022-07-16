@@ -9,6 +9,11 @@ import { PurchasesService } from 'services/purchases.service';
 import { ProductsService } from 'services/products.service';
 import { ProvidersService } from 'services/providers.service';
 import { Category } from 'interfaces/category';
+import {
+  BreakpointObserver,
+  Breakpoints,
+  BreakpointState,
+} from '@angular/cdk/layout';
 
 interface productsList {
   product: Product;
@@ -32,13 +37,22 @@ export class PurchasesFormComponent implements OnInit {
   displayedContent: any[] = [];
   listLevel: number = 0;
 
-  displayedColumns: string[] = ['name', 'quantity', 'price', 'actions'];
+  displayedColumns: string[] = [
+    'name',
+    'quantity',
+    'price',
+    'total',
+    'actions',
+  ];
   productListDataSource: BehaviorSubject<productsList[]> = new BehaviorSubject<
     productsList[]
   >([]);
   searchText: string = '';
+  hideSidenav: boolean = false;
+  expandProductList: boolean = false;
 
   constructor(
+    private breakpointObserver: BreakpointObserver,
     private purchasesService: PurchasesService,
     private providersService: ProvidersService,
     private productsService: ProductsService,
@@ -51,6 +65,16 @@ export class PurchasesFormComponent implements OnInit {
       provider: new FormControl(''),
       list: new FormArray([]),
     });
+
+    this.breakpointObserver
+      .observe([Breakpoints.Small, Breakpoints.Handset])
+      .subscribe((state: BreakpointState) => {
+        if (state.matches) {
+          this.hideSidenav = true;
+        } else {
+          this.hideSidenav = false;
+        }
+      });
   }
 
   ngOnInit(): void {
