@@ -33,6 +33,10 @@ export class PurchasesFormComponent implements OnInit {
   listLevel: number = 0;
 
   displayedColumns: string[] = ['name', 'quantity', 'price', 'actions'];
+  productListDataSource: BehaviorSubject<productsList[]> = new BehaviorSubject<
+    productsList[]
+  >([]);
+  searchText: string = '';
 
   constructor(
     private purchasesService: PurchasesService,
@@ -105,7 +109,6 @@ export class PurchasesFormComponent implements OnInit {
             })
           ).values(),
         ];
-        this.displayedContent = this.categories;
       },
     });
 
@@ -115,6 +118,10 @@ export class PurchasesFormComponent implements OnInit {
           (acc: number, item: productsList) => acc + item.cost * item.quantity,
           0
         );
+
+        if (list.length !== this.productListDataSource.value.length) {
+          this.productListDataSource.next(list);
+        }
       },
     });
   }
@@ -181,18 +188,12 @@ export class PurchasesFormComponent implements OnInit {
     });
 
     this.productList.push(productForm);
+    // this.productListDataSource.next(this.productList.value);
   }
 
   removeProduct(i: number) {
     this.productList.removeAt(i);
-  }
-
-  calculateTotalPrice() {
-    // this.totalPrice = 0;
-    // for (let i = 0; i < this.productList.length; i++) {
-    //   let value = this.productList.at(i).value;
-    //   this.totalPrice += +value.cost * +value.quantity;
-    // }
+    // this.productListDataSource.next(this.productList.value);
   }
 
   get productList(): FormArray {
@@ -233,5 +234,29 @@ export class PurchasesFormComponent implements OnInit {
         return item._id == product;
       })?.name ?? ''
     );
+  }
+
+  search() {
+    this.displayedContent = this.products.filter((product) => {
+      for (const key in product) {
+        const value = product[key as keyof Product];
+
+        const stringMathed =
+          typeof value == 'string' &&
+          (this.searchText == '' ||
+            value.toLowerCase().match(this.searchText.toLowerCase()));
+
+        const numberMatched =
+          typeof value == 'number' &&
+          value.toString().toLowerCase().match(this.searchText.toLowerCase());
+
+        if (stringMathed || numberMatched) {
+          return true;
+        }
+      }
+      return false;
+    });
+
+    this.listLevel = 1;
   }
 }
