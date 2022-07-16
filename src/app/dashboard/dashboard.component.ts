@@ -168,6 +168,9 @@ export class DashboardComponent implements OnInit {
         scales: {
           y: {
             beginAtZero: true,
+            ticks: {
+              stepSize: 1,
+            },
           },
           x: {
             ticks: {
