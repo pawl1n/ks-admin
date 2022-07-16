@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Purchase } from 'interfaces/purchase';
 import { Product } from 'interfaces/product';
@@ -62,7 +63,7 @@ export class PurchasesFormComponent implements OnInit {
     this.form = new FormGroup({
       number: new FormControl(''),
       date: new FormControl(''),
-      provider: new FormControl(''),
+      provider: new FormControl('', Validators.required),
       list: new FormArray([]),
     });
 
@@ -150,6 +151,29 @@ export class PurchasesFormComponent implements OnInit {
     });
   }
 
+  openDialog(event: Event, i: number) {
+    event.stopPropagation();
+    const dialogRef = this.dialog.open(ProductsComponent, {
+      data: {
+        isDialog: true,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        let product = this.products.find((product) => product._id == result);
+        if (product) {
+          this.productList.at(i).patchValue({
+            product: result,
+          });
+          this.onProductChange(undefined, i, product);
+        } else {
+          this.matService.openSnackBar('Виникла помилка при обиранні товару');
+        }
+      }
+    });
+  }
+
   onSubmit() {
     if (this.isNew) {
       this.create();
@@ -205,8 +229,12 @@ export class PurchasesFormComponent implements OnInit {
   addProduct(product: Product, quantity: number = 1, cost: number = 0) {
     const productForm = new FormGroup({
       product: new FormControl(product?._id, [Validators.required]),
-      quantity: new FormControl(quantity, [Validators.required]),
-      cost: new FormControl(cost, [Validators.required]),
+      quantity: new FormControl(quantity, [
+        Validators.required,
+        Validators.max(product?.stock ?? 1),
+        Validators.min(1),
+      ]),
+      cost: new FormControl(cost, [Validators.required, Validators.min(0)]),
       article: new FormControl(product?.article),
       size: new FormControl(product?.size),
     });
