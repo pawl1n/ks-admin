@@ -17,10 +17,7 @@ export class CategoriesDataSource extends DataSource<Category> {
   sort: MatSort | undefined;
   loading = true;
 
-  constructor(
-    private categoriesService: CategoriesService,
-    private matService: MaterialService
-  ) {
+  constructor(private categoriesService: CategoriesService) {
     super();
     this.categories = [];
   }

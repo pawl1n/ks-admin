@@ -5,7 +5,6 @@ import { MatTable } from '@angular/material/table';
 import { ProvidersDataSource } from './providers-datasource';
 import { ProvidersService } from 'services/providers.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MaterialService } from 'src/app/ui/material.service';
 import { Provider } from 'interfaces/provider';
 
 @Component({

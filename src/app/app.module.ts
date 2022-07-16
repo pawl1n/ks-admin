@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { MatPaginatorIntl } from '@angular/material/paginator';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -25,6 +24,7 @@ import { ProvidersComponent } from './providers/providers.component';
 import { ProvidersFormComponent } from './providers/providers-form/providers-form.component';
 import { PurchasesComponent } from './purchases/purchases.component';
 import { PurchasesFormComponent } from './purchases/purchases-form/purchases-form.component';
+import { UnifiedListComponent } from './unified/list/unified-list.component';
 
 import { MatSliderModule } from '@angular/material/slider';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -50,6 +50,12 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatExpansionModule } from '@angular/material/expansion';
+<<<<<<< Updated upstream
+=======
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatTreeModule } from '@angular/material/tree';
+>>>>>>> Stashed changes
 
 @NgModule({
   declarations: [
@@ -72,6 +78,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
     ProvidersFormComponent,
     PurchasesComponent,
     PurchasesFormComponent,
+    UnifiedListComponent,
   ],
   imports: [
     BrowserModule,
@@ -102,6 +109,12 @@ import { MatExpansionModule } from '@angular/material/expansion';
     MatDatepickerModule,
     MatTooltipModule,
     MatExpansionModule,
+<<<<<<< Updated upstream
+=======
+    MatAutocompleteModule,
+    MatDialogModule,
+    MatTreeModule,
+>>>>>>> Stashed changes
   ],
   providers: [
     {

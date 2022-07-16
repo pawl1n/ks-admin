@@ -1,8 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { CategoriesComponent } from './categories/categories.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { ProductsComponent } from './products/products.component';
 import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component';
 import { LoginComponent } from './login/login.component';
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
@@ -10,37 +8,13 @@ import { RegisterComponent } from './register/register.component';
 import { AuthGuard } from 'classes/auth.guard';
 import { CategoriesFormComponent } from './categories/categories-form/categories-form.component';
 import { ProductsFormComponent } from './products/products-form/products-form.component';
-import { UsersComponent } from './users/users.component';
 import { UsersFormComponent } from './users/users-form/users-form.component';
-import { OrdersComponent } from './orders/orders.component';
 import { OrdersFormComponent } from './orders/orders-form/orders-form.component';
-import { ProvidersComponent } from './providers/providers.component';
 import { ProvidersFormComponent } from './providers/providers-form/providers-form.component';
-import { PurchasesComponent } from './purchases/purchases.component';
 import { PurchasesFormComponent } from './purchases/purchases-form/purchases-form.component';
+import { UnifiedListComponent } from './unified/list/unified-list.component';
 
 const routes: Routes = [
-  {
-    path: '',
-    component: AuthLayoutComponent,
-    children: [
-      {
-        path: '',
-        redirectTo: 'login',
-        pathMatch: 'full',
-      },
-      {
-        path: 'login',
-        component: LoginComponent,
-        title: 'Вхід',
-      },
-      {
-        path: 'register',
-        component: RegisterComponent,
-        title: 'Реєстрація',
-      },
-    ],
-  },
   {
     path: '',
     component: AdminLayoutComponent,
@@ -62,9 +36,19 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            component: ProductsComponent,
+            component: UnifiedListComponent,
             data: {
               breadcrumb: '',
+              url: 'products',
+              displayedColumns: [
+                'name',
+                'price',
+                'description',
+                'category',
+                'article',
+                'stock',
+                'size',
+              ],
             },
             title: 'Товари',
           },
@@ -94,9 +78,11 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            component: CategoriesComponent,
+            component: UnifiedListComponent,
             data: {
               breadcrumb: '',
+              url: 'categories',
+              displayedColumns: ['name'],
             },
             title: 'Категорії',
           },
@@ -113,6 +99,16 @@ const routes: Routes = [
             component: CategoriesFormComponent,
             data: {
               breadcrumb: 'Редагування категорії',
+              url: 'products',
+              displayedColumns: [
+                'name',
+                'price',
+                'description',
+                'category',
+                'article',
+                'stock',
+                'size',
+              ],
             },
             title: 'Редагування категорії',
           },
@@ -126,10 +122,12 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            component: UsersComponent,
+            component: UnifiedListComponent,
             title: 'Клієнти',
             data: {
               breadcrumb: '',
+              url: 'users',
+              displayedColumns: ['email', 'name', 'phone', 'isAdmin'],
             },
           },
           {
@@ -158,10 +156,18 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            component: OrdersComponent,
+            component: UnifiedListComponent,
             title: 'Замовлення',
             data: {
               breadcrumb: '',
+              url: 'orders',
+              displayedColumns: [
+                'order',
+                'user',
+                'status',
+                'totalPrice',
+                'date',
+              ],
             },
           },
           {
@@ -190,10 +196,12 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            component: PurchasesComponent,
+            component: UnifiedListComponent,
             title: 'Закупки',
             data: {
               breadcrumb: '',
+              url: 'purchases',
+              displayedColumns: ['number', 'provider', 'totalPrice', 'date'],
             },
           },
           {
@@ -222,10 +230,12 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            component: ProvidersComponent,
+            component: UnifiedListComponent,
             title: 'Постачальники',
             data: {
               breadcrumb: '',
+              url: 'providers',
+              displayedColumns: ['name'],
             },
           },
           {
@@ -249,6 +259,27 @@ const routes: Routes = [
       {
         path: 'logout',
         component: DashboardComponent,
+      },
+    ],
+  },
+  {
+    path: '',
+    component: AuthLayoutComponent,
+    children: [
+      {
+        path: '',
+        redirectTo: 'login',
+        pathMatch: 'full',
+      },
+      {
+        path: 'login',
+        component: LoginComponent,
+        title: 'Вхід',
+      },
+      {
+        path: 'register',
+        component: RegisterComponent,
+        title: 'Реєстрація',
       },
     ],
   },

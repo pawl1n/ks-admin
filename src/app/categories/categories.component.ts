@@ -19,15 +19,13 @@ export class CategoriesComponent implements AfterViewInit {
   @ViewChild(MatTable) table!: MatTable<Category>;
   dataSource: CategoriesDataSource;
 
-  /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
   displayedColumns = ['name'];
 
   constructor(
     private categoriesService: CategoriesService,
-    private router: Router,
-    private matService: MaterialService
+    private router: Router
   ) {
-    this.dataSource = new CategoriesDataSource(categoriesService, matService);
+    this.dataSource = new CategoriesDataSource(categoriesService);
   }
 
   ngAfterViewInit(): void {
