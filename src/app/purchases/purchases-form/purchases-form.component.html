@@ -1,6 +1,6 @@
 <mat-card>
   <mat-card-content>
-    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="accordionForm">
       <mat-accordion multi>
         <mat-expansion-panel expanded>
           <mat-expansion-panel-header>
@@ -32,14 +32,14 @@
             <mat-panel-description></mat-panel-description>
           </mat-expansion-panel-header>
           <div class="table-wrapper">
-            <mat-grid-list cols="6" rowHeight="56px">
+            <mat-grid-list cols="12" rowHeight="56px">
               <div class="Header">
-                <mat-grid-tile>Товар</mat-grid-tile>
-                <mat-grid-tile>Кількість</mat-grid-tile>
-                <mat-grid-tile>Артикул</mat-grid-tile>
-                <mat-grid-tile>Розмір</mat-grid-tile>
-                <mat-grid-tile>Ціна</mat-grid-tile>
-                <mat-grid-tile></mat-grid-tile>
+                <mat-grid-tile colspan="3">Товар</mat-grid-tile>
+                <mat-grid-tile colspan="2">Кількість</mat-grid-tile>
+                <mat-grid-tile colspan="2">Артикул</mat-grid-tile>
+                <mat-grid-tile colspan="1">Розмір</mat-grid-tile>
+                <mat-grid-tile colspan="2">Ціна</mat-grid-tile>
+                <mat-grid-tile colspan="2"></mat-grid-tile>
               </div>
 
               <div class="product-list">
@@ -51,7 +51,7 @@
                     "
                   >
                     <div [formGroup]="$any(productForm)">
-                      <mat-grid-tile
+                      <mat-grid-tile colspan="3"
                         ><mat-form-field>
                           <mat-select
                             formControlName="product"
@@ -63,20 +63,30 @@
                             >
                               {{ item.name }}
                             </mat-option>
-                          </mat-select></mat-form-field
-                        ></mat-grid-tile
-                      >
-                      <mat-grid-tile
+                          </mat-select>
+                          <a
+                            matSuffix
+                            mat-icon-button
+                            aria-label="Обрати товари"
+                            (click)="openDialog($event, i)"
+                            class="icon-big"
+                          >
+                            <mat-icon>manage_search</mat-icon>
+                          </a>
+                        </mat-form-field>
+                      </mat-grid-tile>
+                      <mat-grid-tile colspan="2"
                         ><mat-form-field>
                           <input
                             matInput
                             formControlName="quantity"
                             placeholder="Кількість"
                             type="number"
-                            min="0"
-                            style="width: 50px" /></mat-form-field
+                            min="1"
+                            style="width: 50px"
+                            (change)="calculateTotalPrice()" /></mat-form-field
                       ></mat-grid-tile>
-                      <mat-grid-tile
+                      <mat-grid-tile colspan="2"
                         ><mat-form-field>
                           <input
                             matInput
@@ -84,7 +94,7 @@
                             placeholder="Артикул"
                             readonly /></mat-form-field
                       ></mat-grid-tile>
-                      <mat-grid-tile
+                      <mat-grid-tile colspan="1"
                         ><mat-form-field>
                           <input
                             matInput
@@ -92,15 +102,17 @@
                             placeholder="Розмір"
                             readonly /></mat-form-field
                       ></mat-grid-tile>
-                      <mat-grid-tile
+                      <mat-grid-tile colspan="2"
                         ><mat-form-field>
                           <input
                             matInput
+                            type="number"
+                            min="0"
                             formControlName="cost"
                             placeholder="Ціна"
                             (change)="calculateTotalPrice()" /></mat-form-field
                       ></mat-grid-tile>
-                      <mat-grid-tile>
+                      <mat-grid-tile colspan="2">
                         <a
                           mat-raised-button
                           class="delete"
@@ -112,13 +124,16 @@
                   </ng-container>
                 </ng-container>
               </div>
-              <mat-grid-tile colspan="4"
+              <mat-grid-tile colspan="8"
                 ><a mat-mini-fab (click)="addProduct()">
                   <mat-icon>add</mat-icon>
                 </a></mat-grid-tile
               >
-              <mat-grid-tile>Загальна вартість: {{ totalPrice }}</mat-grid-tile>
-              <mat-grid-tile></mat-grid-tile>
+              <mat-grid-tile colspan="2"
+                >Загальна вартість:
+                {{ totalPrice | currency: "₴" }}</mat-grid-tile
+              >
+              <mat-grid-tile colspan="2"></mat-grid-tile>
             </mat-grid-list>
           </div>
         </mat-expansion-panel>
