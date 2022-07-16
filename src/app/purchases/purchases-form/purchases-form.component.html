@@ -1,15 +1,4 @@
-<<<<<<< Updated upstream
-<mat-card>
-  <mat-card-content>
-    <form [formGroup]="form" (ngSubmit)="onSubmit()">
-      <mat-accordion multi>
-        <mat-expansion-panel expanded>
-          <mat-expansion-panel-header>
-            <mat-panel-title> Основна інформація </mat-panel-title>
-            <mat-panel-description> </mat-panel-description>
-          </mat-expansion-panel-header>
-=======
-<mat-sidenav-container>
+<mat-sidenav-container [style.z-index]="0">
   <mat-sidenav
     #drawerProducts
     fixedInViewport
@@ -20,7 +9,6 @@
     [style.max-width]="'250px'"
   >
     <mat-toolbar><!-- top spacing --></mat-toolbar>
->>>>>>> Stashed changes
 
     <ng-container [ngSwitch]="listLevel">
       <mat-list *ngSwitchCase="0">
@@ -39,7 +27,6 @@
         <mat-list-item
           *ngFor="let product of displayedContent"
           (click)="selectProduct(product)"
-          [class]="isSelected(product)"
         >
           <div class="product-item">
             <div class="product-header">
@@ -66,91 +53,6 @@
     </ng-container>
   </mat-sidenav>
 
-<<<<<<< Updated upstream
-        <mat-expansion-panel>
-          <mat-expansion-panel-header>
-            <mat-panel-title> Товари </mat-panel-title>
-            <mat-panel-description></mat-panel-description>
-          </mat-expansion-panel-header>
-          <div class="table-wrapper">
-            <mat-grid-list cols="6" rowHeight="56px">
-              <div class="Header">
-                <mat-grid-tile>Товар</mat-grid-tile>
-                <mat-grid-tile>Кількість</mat-grid-tile>
-                <mat-grid-tile>Артикул</mat-grid-tile>
-                <mat-grid-tile>Розмір</mat-grid-tile>
-                <mat-grid-tile>Ціна</mat-grid-tile>
-                <mat-grid-tile></mat-grid-tile>
-              </div>
-
-              <div class="product-list">
-                <ng-container formArrayName="list">
-                  <ng-container
-                    *ngFor="
-                      let productForm of productList.controls;
-                      let i = index
-                    "
-                  >
-                    <div [formGroup]="$any(productForm)">
-                      <mat-grid-tile
-                        ><mat-form-field>
-                          <mat-select
-                            formControlName="product"
-                            (selectionChange)="onProductChange($event, i)"
-                          >
-                            <mat-option
-                              *ngFor="let item of products"
-                              [value]="item._id"
-                            >
-                              {{ item.name }}
-                            </mat-option>
-                          </mat-select></mat-form-field
-                        ></mat-grid-tile
-                      >
-                      <mat-grid-tile
-                        ><mat-form-field>
-                          <input
-                            matInput
-                            formControlName="quantity"
-                            placeholder="Кількість"
-                            type="number"
-                            min="0"
-                            style="width: 50px" /></mat-form-field
-                      ></mat-grid-tile>
-                      <mat-grid-tile
-                        ><mat-form-field>
-                          <input
-                            matInput
-                            formControlName="article"
-                            placeholder="Артикул"
-                            readonly /></mat-form-field
-                      ></mat-grid-tile>
-                      <mat-grid-tile
-                        ><mat-form-field>
-                          <input
-                            matInput
-                            formControlName="size"
-                            placeholder="Розмір"
-                            readonly /></mat-form-field
-                      ></mat-grid-tile>
-                      <mat-grid-tile
-                        ><mat-form-field>
-                          <input
-                            matInput
-                            formControlName="cost"
-                            placeholder="Ціна"
-                            (change)="calculateTotalPrice()" /></mat-form-field
-                      ></mat-grid-tile>
-                      <mat-grid-tile>
-                        <a
-                          mat-raised-button
-                          class="delete"
-                          (click)="deleteProduct(i)"
-                          ><mat-icon> delete</mat-icon></a
-                        >
-                      </mat-grid-tile>
-                    </div>
-=======
   <mat-sidenav-content>
     <mat-card>
       <mat-card-content>
@@ -188,7 +90,7 @@
               <div class="table-wrapper">
                 <table
                   mat-table
-                  [dataSource]="productsDataSource"
+                  [dataSource]="productList.value"
                   formArrayName="list"
                   [style.width]="'100%'"
                 >
@@ -212,12 +114,7 @@
                       [formGroupName]="index"
                     >
                       <mat-form-field>
-                        <input
-                          matInput
-                          type="number"
-                          formControlName="cost"
-                          [value]="item.cost"
-                        />
+                        <input matInput type="number" formControlName="cost" />
                       </mat-form-field>
                     </td>
                   </ng-container>
@@ -233,11 +130,9 @@
                           matInput
                           type="number"
                           formControlName="quantity"
-                          [value]="item.quantity"
                         />
                       </mat-form-field>
                     </td>
->>>>>>> Stashed changes
                   </ng-container>
                   <ng-container matColumnDef="total">
                     <th mat-header-cell *matHeaderCellDef>Сума</th>
@@ -262,6 +157,13 @@
                     *matRowDef="let row; columns: displayedColumns"
                   ></tr>
                 </table>
+
+                <!-- show total price -->
+                <div class="total-price">
+                  <span>Сума:</span>
+                  <span>{{ totalPrice | currency: "₴" }}</span>
+                </div>
+
                 <!-- <mat-grid-list cols="12" rowHeight="56px">
                   <div class="Header">
                     <mat-grid-tile colspan="3">Товар</mat-grid-tile>
@@ -370,22 +272,8 @@
                   <mat-grid-tile colspan="2"></mat-grid-tile>
                 </mat-grid-list> -->
               </div>
-<<<<<<< Updated upstream
-              <mat-grid-tile colspan="4"
-                ><a mat-mini-fab (click)="addProduct()">
-                  <mat-icon>add</mat-icon>
-                </a></mat-grid-tile
-              >
-              <mat-grid-tile>Загальна вартість: {{ totalPrice }}</mat-grid-tile>
-              <mat-grid-tile></mat-grid-tile>
-            </mat-grid-list>
-          </div>
-        </mat-expansion-panel>
-      </mat-accordion>
-=======
             </mat-expansion-panel>
           </mat-accordion>
->>>>>>> Stashed changes
 
           <pre>{{ form.value | json }}</pre>
 

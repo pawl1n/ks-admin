@@ -50,12 +50,9 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatExpansionModule } from '@angular/material/expansion';
-<<<<<<< Updated upstream
-=======
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatTreeModule } from '@angular/material/tree';
->>>>>>> Stashed changes
 
 @NgModule({
   declarations: [
@@ -109,12 +106,9 @@ import { MatTreeModule } from '@angular/material/tree';
     MatDatepickerModule,
     MatTooltipModule,
     MatExpansionModule,
-<<<<<<< Updated upstream
-=======
     MatAutocompleteModule,
     MatDialogModule,
     MatTreeModule,
->>>>>>> Stashed changes
   ],
   providers: [
     {

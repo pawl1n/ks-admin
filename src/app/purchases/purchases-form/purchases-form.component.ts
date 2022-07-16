@@ -1,9 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
-<<<<<<< Updated upstream
-import { MatSelectChange } from '@angular/material/select';
-=======
->>>>>>> Stashed changes
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Purchase } from 'interfaces/purchase';
 import { Product } from 'interfaces/product';
@@ -12,10 +8,7 @@ import { BehaviorSubject, of, switchMap } from 'rxjs';
 import { PurchasesService } from 'services/purchases.service';
 import { ProductsService } from 'services/products.service';
 import { ProvidersService } from 'services/providers.service';
-<<<<<<< Updated upstream
-=======
 import { Category } from 'interfaces/category';
->>>>>>> Stashed changes
 
 interface productsList {
   product: Product;
@@ -40,10 +33,6 @@ export class PurchasesFormComponent implements OnInit {
   listLevel: number = 0;
 
   displayedColumns: string[] = ['name', 'quantity', 'price', 'actions'];
-  selectedProducts: productsList[] = [];
-  productsDataSource: BehaviorSubject<FormGroup[]> = new BehaviorSubject(
-    [] as FormGroup[]
-  );
 
   constructor(
     private purchasesService: PurchasesService,
@@ -51,18 +40,17 @@ export class PurchasesFormComponent implements OnInit {
     private productsService: ProductsService,
     private router: Router,
     private route: ActivatedRoute
-  ) {}
-
-  ngOnInit(): void {
+  ) {
     this.form = new FormGroup({
       number: new FormControl(''),
       date: new FormControl(''),
       provider: new FormControl(''),
       list: new FormArray([]),
     });
+  }
 
+  ngOnInit(): void {
     this.form.disable();
-
     this.route.params
       .pipe(
         switchMap((params: Params) => {
@@ -120,34 +108,17 @@ export class PurchasesFormComponent implements OnInit {
         this.displayedContent = this.categories;
       },
     });
+
+    this.productList.valueChanges.subscribe({
+      next: (list: productsList[]) => {
+        this.totalPrice = list.reduce(
+          (acc: number, item: productsList) => acc + item.cost * item.quantity,
+          0
+        );
+      },
+    });
   }
 
-<<<<<<< Updated upstream
-=======
-  // openDialog(event: Event, i: number) {
-  //   event.stopPropagation();
-  //   const dialogRef = this.dialog.open(ProductsComponent, {
-  //     data: {
-  //       isDialog: true,
-  //     },
-  //   });
-
-  //   dialogRef.afterClosed().subscribe((result) => {
-  //     if (result) {
-  //       let product = this.products.find((product) => product._id == result);
-  //       if (product) {
-  //         this.productList.at(i).patchValue({
-  //           product: result,
-  //         });
-  //         this.onProductChange(undefined, i, product);
-  //       } else {
-  //         this.matService.openSnackBar('Виникла помилка при обиранні товару');
-  //       }
-  //     }
-  //   });
-  // }
-
->>>>>>> Stashed changes
   onSubmit() {
     if (this.isNew) {
       this.create();
@@ -200,15 +171,7 @@ export class PurchasesFormComponent implements OnInit {
     }
   }
 
-<<<<<<< Updated upstream
-  addProduct(
-    product: Product | null = null,
-    quantity: number | null = null,
-    cost: number | null = null
-  ) {
-=======
   addProduct(product: Product, quantity: number = 1, cost: number = 0) {
->>>>>>> Stashed changes
     const productForm = new FormGroup({
       product: new FormControl(product?._id, [Validators.required]),
       quantity: new FormControl(quantity, [Validators.required]),
@@ -218,65 +181,21 @@ export class PurchasesFormComponent implements OnInit {
     });
 
     this.productList.push(productForm);
-    this.productsDataSource.next(this.productList.value);
-    this.calculateTotalPrice();
-
-<<<<<<< Updated upstream
-  onProductChange(event: MatSelectChange, i: number) {
-    let product = this.products.find((product) => {
-      return product._id == event.source.value;
-    });
-    this.productList.at(i).patchValue({
-      article: product?.article,
-      size: product?.size,
-    });
-    this.productList.at(i).updateValueAndValidity();
-=======
-    this.products.find((el: any) => el._id == product)?.name;
->>>>>>> Stashed changes
   }
-
-  // onProductChange(
-  //   event: MatSelectChange | undefined = undefined,
-  //   i: number,
-  //   product: Product | undefined = undefined
-  // ) {
-  //   if (event instanceof MatSelectChange) {
-  //     product = this.products.find((product) => {
-  //       return product._id == event.source.value;
-  //     });
-  //   }
-  //   this.productList.at(i).patchValue({
-  //     article: product?.article,
-  //     size: product?.size,
-  //   });
-  //   this.productList
-  //     .at(i)
-  //     .get('quantity')
-  //     ?.setValidators([
-  //       Validators.required,
-  //       Validators.max(product?.stock ?? 1),
-  //       Validators.min(1),
-  //     ]);
-  //   this.productList.at(i).get('quantity')?.updateValueAndValidity();
-  //   this.productList.at(i).updateValueAndValidity();
-  // }
 
   removeProduct(i: number) {
     this.productList.removeAt(i);
-    this.productsDataSource.next(this.productList.value);
-    this.calculateTotalPrice();
   }
 
   calculateTotalPrice() {
-    this.totalPrice = 0;
-    for (let i = 0; i < this.productList.length; i++) {
-      let value = this.productList.at(i).value;
-      this.totalPrice += +value.cost * +value.quantity;
-    }
+    // this.totalPrice = 0;
+    // for (let i = 0; i < this.productList.length; i++) {
+    //   let value = this.productList.at(i).value;
+    //   this.totalPrice += +value.cost * +value.quantity;
+    // }
   }
 
-  get productList() {
+  get productList(): FormArray {
     return this.form.get('list') as FormArray;
   }
 
@@ -300,12 +219,12 @@ export class PurchasesFormComponent implements OnInit {
     }
   }
 
-  isSelected(product: Product): 'selected' | '' {
-    return this.productList.value.find((item: any) => {
-      return item.product == product._id;
-    }) != undefined
-      ? 'selected'
-      : '';
+  isSelected(product: Product): boolean {
+    return (
+      this.productList.value.find((item: any) => {
+        return item.product == product._id;
+      }) != undefined
+    );
   }
 
   getProductName(product: Product): string {
