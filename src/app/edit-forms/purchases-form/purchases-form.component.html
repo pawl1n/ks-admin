@@ -1,38 +1,41 @@
-<mat-sidenav-container [style.z-index]="0">
+<mat-sidenav-container [hasBackdrop]="false">
   <mat-sidenav
     #drawerProducts
     fixedInViewport
     [attr.role]="'dialog'"
     [mode]="hideSidenav ? 'over' : 'side'"
     [opened]="hideSidenav ? false : true"
-    [style.width]="'100%'"
-    [style.max-width]="'250px'"
   >
     <mat-toolbar><!-- top spacing --></mat-toolbar>
 
     <ng-container [ngSwitch]="listLevel">
-      <mat-form-field
-        [style.font-size]="'14px'"
-        [style.width]="'calc(100% - 30px)'"
-        [style.margin]="'5px 15px 0 15px'"
-      >
-        <mat-label>Пошук</mat-label>
-        <input
-          matInput
-          type="search"
-          [(ngModel)]="searchText"
-          (input)="search()"
-        />
+      <div class="top-bar">
+        <mat-form-field class="search-field">
+          <mat-label>Пошук</mat-label>
+          <input
+            matInput
+            type="search"
+            [(ngModel)]="searchText"
+            (input)="search()"
+          />
+          <button
+            *ngIf="searchText"
+            matSuffix
+            mat-icon-button
+            aria-label="Очистити"
+            (click)="searchText = ''; search()"
+          >
+            <mat-icon>close</mat-icon>
+          </button>
+        </mat-form-field>
         <button
-          *ngIf="searchText"
-          matSuffix
           mat-icon-button
-          aria-label="Очистити"
-          (click)="searchText = ''; search()"
+          *ngIf="hideSidenav"
+          (click)="drawerProducts.close()"
         >
-          <mat-icon>close</mat-icon>
+          <mat-icon>done</mat-icon>
         </button>
-      </mat-form-field>
+      </div>
       <mat-list *ngSwitchCase="0">
         <mat-list-item
           *ngFor="let category of categories"
@@ -109,18 +112,22 @@
             >
               <mat-expansion-panel-header>
                 <mat-panel-title>
-                  Товари
-                  <span>&nbsp;— {{ productList.value.length }} </span>
-                  <span>&nbsp;— {{ totalPrice | currency: "₴" }} </span>
                   <a
                     mat-icon-button
+                    [style.color]="'black'"
                     (click)="$event.stopPropagation(); drawerProducts.toggle()"
-                    *ngIf="hideSidenav && !drawerProducts.opened"
+                    *ngIf="hideSidenav"
                   >
                     <mat-icon>search</mat-icon>
                   </a>
+                  Товари
                 </mat-panel-title>
-                <mat-panel-description></mat-panel-description>
+                <mat-panel-description>
+                  <span
+                    >{{ productList.value.length }} —
+                    {{ totalPrice | currency: "₴" }}
+                  </span></mat-panel-description
+                >
               </mat-expansion-panel-header>
               <div class="table-wrapper">
                 <table
@@ -190,10 +197,9 @@
                   ></tr>
                 </table>
 
-                <div class="total-price">
-                  <span>Сума:</span>
-                  <span>{{ totalPrice | currency: "₴" }}</span>
-                </div>
+                <h3 class="total-price">
+                  Сума: {{ totalPrice | currency: "₴" }}
+                </h3>
               </div>
             </mat-expansion-panel>
           </mat-accordion>

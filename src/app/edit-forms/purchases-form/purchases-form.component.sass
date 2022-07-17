@@ -1,3 +1,11 @@
+mat-sidenav-container
+  height: calc(100% - 64px)
+  z-index: 0
+
+  mat-sidenav
+    width: 100%
+    max-width: 250px
+  
 form
   padding: 25px 50px
 
@@ -15,6 +23,18 @@ form
 
     .delete
       margin-left: 20px
+
+.top-bar
+  margin: 5px 15px 0 15px
+  display: flex
+  justify-content: space-between
+
+  .search-field
+    font-size: 14px
+    flex-grow: 1
+
+.total-price
+  text-align: right
 
 mat-list-item
   cursor: pointer
