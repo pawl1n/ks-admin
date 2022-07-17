@@ -34,9 +34,9 @@ export class UsersFormComponent implements OnInit {
     this.route.params
       .pipe(
         switchMap((params: Params) => {
-          if (params['userId']) {
+          if (params['id']) {
             this.isNew = false;
-            return this.usersService.getById(params['userId']);
+            return this.usersService.getById(params['id']);
           } else {
             return of(null);
           }

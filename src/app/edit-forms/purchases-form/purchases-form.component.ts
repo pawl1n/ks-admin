@@ -109,9 +109,9 @@ export class PurchasesFormComponent implements OnInit {
 
     this.route.queryParams.subscribe({
       next: (params: Params) => {
-        if (params['providerId']) {
+        if (params['provider']) {
           this.form.patchValue({
-            provider: params['providerId'],
+            provider: params['provider'],
           });
         }
       },

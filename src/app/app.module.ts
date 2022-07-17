@@ -4,26 +4,20 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { CategoriesComponent } from './categories/categories.component';
 import { LoginComponent } from './login/login.component';
 import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component';
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { ProductsComponent } from './products/products.component';
 import { RegisterComponent } from './register/register.component';
 import { TokenInterceptor } from 'classes/token.interceptor';
-import { CategoriesFormComponent } from './categories/categories-form/categories-form.component';
-import { ProductsFormComponent } from './products/products-form/products-form.component';
+import { CategoriesFormComponent } from './edit-forms/categories-form/categories-form.component';
+import { ProductsFormComponent } from './edit-forms/products-form/products-form.component';
 import { ErrorHandlerInterceptor } from 'classes/error-handler.interceptor';
 import { BreadcrumbComponent } from './ui/breadcrumb/breadcrumb.component';
-import { UsersComponent } from './users/users.component';
-import { UsersFormComponent } from './users/users-form/users-form.component';
-import { OrdersComponent } from './orders/orders.component';
-import { OrdersFormComponent } from './orders/orders-form/orders-form.component';
-import { ProvidersComponent } from './providers/providers.component';
-import { ProvidersFormComponent } from './providers/providers-form/providers-form.component';
-import { PurchasesComponent } from './purchases/purchases.component';
-import { PurchasesFormComponent } from './purchases/purchases-form/purchases-form.component';
+import { UsersFormComponent } from './edit-forms/users-form/users-form.component';
+import { OrdersFormComponent } from './edit-forms/orders-form/orders-form.component';
+import { ProvidersFormComponent } from './edit-forms/providers-form/providers-form.component';
+import { PurchasesFormComponent } from './edit-forms/purchases-form/purchases-form.component';
 import { UnifiedListComponent } from './unified/list/unified-list.component';
 
 import { MatSliderModule } from '@angular/material/slider';
@@ -58,8 +52,6 @@ import { MatTreeModule } from '@angular/material/tree';
   declarations: [
     AppComponent,
     DashboardComponent,
-    ProductsComponent,
-    CategoriesComponent,
     LoginComponent,
     AuthLayoutComponent,
     AdminLayoutComponent,
@@ -67,13 +59,9 @@ import { MatTreeModule } from '@angular/material/tree';
     CategoriesFormComponent,
     ProductsFormComponent,
     BreadcrumbComponent,
-    UsersComponent,
     UsersFormComponent,
-    OrdersComponent,
     OrdersFormComponent,
-    ProvidersComponent,
     ProvidersFormComponent,
-    PurchasesComponent,
     PurchasesFormComponent,
     UnifiedListComponent,
   ],

@@ -31,9 +31,9 @@ export class ProvidersFormComponent implements OnInit {
     this.route.params
       .pipe(
         switchMap((params: Params) => {
-          if (params['providerId']) {
+          if (params['id']) {
             this.isNew = false;
-            return this.providersService.getById(params['providerId']);
+            return this.providersService.getById(params['id']);
           } else {
             return of(null);
           }

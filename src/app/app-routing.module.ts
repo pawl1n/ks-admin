@@ -6,12 +6,12 @@ import { LoginComponent } from './login/login.component';
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 import { RegisterComponent } from './register/register.component';
 import { AuthGuard } from 'classes/auth.guard';
-import { CategoriesFormComponent } from './categories/categories-form/categories-form.component';
-import { ProductsFormComponent } from './products/products-form/products-form.component';
-import { UsersFormComponent } from './users/users-form/users-form.component';
-import { OrdersFormComponent } from './orders/orders-form/orders-form.component';
-import { ProvidersFormComponent } from './providers/providers-form/providers-form.component';
-import { PurchasesFormComponent } from './purchases/purchases-form/purchases-form.component';
+import { CategoriesFormComponent } from './edit-forms/categories-form/categories-form.component';
+import { ProductsFormComponent } from './edit-forms/products-form/products-form.component';
+import { UsersFormComponent } from './edit-forms/users-form/users-form.component';
+import { OrdersFormComponent } from './edit-forms/orders-form/orders-form.component';
+import { ProvidersFormComponent } from './edit-forms/providers-form/providers-form.component';
+import { PurchasesFormComponent } from './edit-forms/purchases-form/purchases-form.component';
 import { UnifiedListComponent } from './unified/list/unified-list.component';
 
 const routes: Routes = [
@@ -39,16 +39,18 @@ const routes: Routes = [
             component: UnifiedListComponent,
             data: {
               breadcrumb: '',
-              url: 'products',
-              displayedColumns: [
-                'name',
-                'price',
-                'description',
-                'category',
-                'article',
-                'stock',
-                'size',
-              ],
+              listData: {
+                url: 'products',
+                displayedColumns: [
+                  'name',
+                  'price',
+                  'description',
+                  'category',
+                  'article',
+                  'stock',
+                  'size',
+                ],
+              },
             },
             title: 'Товари',
           },
@@ -81,8 +83,10 @@ const routes: Routes = [
             component: UnifiedListComponent,
             data: {
               breadcrumb: '',
-              url: 'categories',
-              displayedColumns: ['name'],
+              listData: {
+                url: 'categories',
+                displayedColumns: ['name'],
+              },
             },
             title: 'Категорії',
           },
@@ -95,20 +99,25 @@ const routes: Routes = [
             title: 'Створення категорії',
           },
           {
-            path: ':categoryId',
+            path: ':id',
             component: CategoriesFormComponent,
             data: {
               breadcrumb: 'Редагування категорії',
-              url: 'products',
-              displayedColumns: [
-                'name',
-                'price',
-                'description',
-                'category',
-                'article',
-                'stock',
-                'size',
-              ],
+              listData: {
+                url: 'products',
+                displayedColumns: [
+                  'name',
+                  'price',
+                  'description',
+                  'category',
+                  'article',
+                  'stock',
+                  'size',
+                ],
+                params: {
+                  category: 'id',
+                },
+              },
             },
             title: 'Редагування категорії',
           },
@@ -126,8 +135,10 @@ const routes: Routes = [
             title: 'Клієнти',
             data: {
               breadcrumb: '',
-              url: 'users',
-              displayedColumns: ['email', 'name', 'phone', 'isAdmin'],
+              listData: {
+                url: 'users',
+                displayedColumns: ['email', 'name', 'phone', 'isAdmin'],
+              },
             },
           },
           {
@@ -139,11 +150,24 @@ const routes: Routes = [
             },
           },
           {
-            path: ':userId',
+            path: ':id',
             component: UsersFormComponent,
             title: 'Редагування клієнта',
             data: {
               breadcrumb: 'Редагування клієнта',
+              listData: {
+                url: 'orders',
+                displayedColumns: [
+                  'order',
+                  'user',
+                  'status',
+                  'totalPrice',
+                  'date',
+                ],
+                params: {
+                  user: 'id',
+                },
+              },
             },
           },
         ],
@@ -160,14 +184,16 @@ const routes: Routes = [
             title: 'Замовлення',
             data: {
               breadcrumb: '',
-              url: 'orders',
-              displayedColumns: [
-                'order',
-                'user',
-                'status',
-                'totalPrice',
-                'date',
-              ],
+              listData: {
+                url: 'orders',
+                displayedColumns: [
+                  'order',
+                  'user',
+                  'status',
+                  'totalPrice',
+                  'date',
+                ],
+              },
             },
           },
           {
@@ -200,8 +226,10 @@ const routes: Routes = [
             title: 'Закупки',
             data: {
               breadcrumb: '',
-              url: 'purchases',
-              displayedColumns: ['number', 'provider', 'totalPrice', 'date'],
+              listData: {
+                url: 'purchases',
+                displayedColumns: ['number', 'provider', 'totalPrice', 'date'],
+              },
             },
           },
           {
@@ -234,8 +262,10 @@ const routes: Routes = [
             title: 'Постачальники',
             data: {
               breadcrumb: '',
-              url: 'providers',
-              displayedColumns: ['name'],
+              listData: {
+                url: 'providers',
+                displayedColumns: ['name'],
+              },
             },
           },
           {
@@ -247,11 +277,18 @@ const routes: Routes = [
             },
           },
           {
-            path: ':providerId',
+            path: ':id',
             component: ProvidersFormComponent,
             title: 'Редагування постачальника',
             data: {
               breadcrumb: 'Редагування постачальника',
+              listData: {
+                url: 'purchases',
+                displayedColumns: ['number', 'provider', 'totalPrice', 'date'],
+                params: {
+                  provider: 'id',
+                },
+              },
             },
           },
         ],

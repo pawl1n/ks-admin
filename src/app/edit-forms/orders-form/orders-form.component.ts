@@ -91,9 +91,9 @@ export class OrdersFormComponent implements OnInit {
 
     this.route.queryParams.subscribe({
       next: (params: Params) => {
-        if (params['userId']) {
+        if (params['user']) {
           this.form.patchValue({
-            user: params['userId'],
+            user: params['user'],
           });
         }
       },

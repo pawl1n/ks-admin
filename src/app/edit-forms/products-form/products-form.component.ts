@@ -80,9 +80,9 @@ export class ProductsFormComponent implements OnInit {
 
     this.route.queryParams.subscribe({
       next: (params: Params) => {
-        if (params['categoryId']) {
+        if (params['category']) {
           this.form.patchValue({
-            category: params['categoryId'],
+            category: params['category'],
           });
         }
       },

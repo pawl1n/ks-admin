@@ -33,9 +33,9 @@ export class CategoriesFormComponent implements OnInit {
     this.route.params
       .pipe(
         switchMap((params: Params) => {
-          if (params['categoryId']) {
+          if (params['id']) {
             this.isNew = false;
-            return this.categories.getById(params['categoryId']);
+            return this.categories.getById(params['id']);
           } else {
             return of(null);
           }
