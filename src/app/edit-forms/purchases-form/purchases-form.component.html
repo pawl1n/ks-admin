@@ -1,165 +1,226 @@
-<mat-card>
-  <mat-card-content>
-    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="accordionForm">
-      <mat-accordion multi>
-        <mat-expansion-panel expanded>
-          <mat-expansion-panel-header>
-            <mat-panel-title> Основна інформація </mat-panel-title>
-            <mat-panel-description> </mat-panel-description>
-          </mat-expansion-panel-header>
+<mat-sidenav-container [style.z-index]="0">
+  <mat-sidenav
+    #drawerProducts
+    fixedInViewport
+    [attr.role]="'dialog'"
+    [mode]="hideSidenav ? 'over' : 'side'"
+    [opened]="hideSidenav ? false : true"
+    [style.width]="'100%'"
+    [style.max-width]="'250px'"
+  >
+    <mat-toolbar><!-- top spacing --></mat-toolbar>
 
-          <mat-form-field appearance="fill">
-            <mat-label>Номер</mat-label>
-            <input matInput formControlName="number" readonly />
-          </mat-form-field>
-          <mat-form-field appearance="fill">
-            <mat-label>Дата</mat-label>
-            <input matInput formControlName="date" readonly />
-          </mat-form-field>
-          <mat-form-field>
-            <mat-label>Постачальник</mat-label>
-            <mat-select formControlName="provider">
-              <mat-option *ngFor="let item of providers" [value]="item._id">
-                {{ item.name }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-        </mat-expansion-panel>
-
-        <mat-expansion-panel>
-          <mat-expansion-panel-header>
-            <mat-panel-title> Товари </mat-panel-title>
-            <mat-panel-description></mat-panel-description>
-          </mat-expansion-panel-header>
-          <div class="table-wrapper">
-            <mat-grid-list cols="12" rowHeight="56px">
-              <div class="Header">
-                <mat-grid-tile colspan="3">Товар</mat-grid-tile>
-                <mat-grid-tile colspan="2">Кількість</mat-grid-tile>
-                <mat-grid-tile colspan="2">Артикул</mat-grid-tile>
-                <mat-grid-tile colspan="1">Розмір</mat-grid-tile>
-                <mat-grid-tile colspan="2">Ціна</mat-grid-tile>
-                <mat-grid-tile colspan="2"></mat-grid-tile>
-              </div>
-
-              <div class="product-list">
-                <ng-container formArrayName="list">
-                  <ng-container
-                    *ngFor="
-                      let productForm of productList.controls;
-                      let i = index
-                    "
-                  >
-                    <div [formGroup]="$any(productForm)">
-                      <mat-grid-tile colspan="3"
-                        ><mat-form-field>
-                          <mat-select
-                            formControlName="product"
-                            (selectionChange)="onProductChange($event, i)"
-                          >
-                            <mat-option
-                              *ngFor="let item of products"
-                              [value]="item._id"
-                            >
-                              {{ item.name }}
-                            </mat-option>
-                          </mat-select>
-                          <a
-                            matSuffix
-                            mat-icon-button
-                            aria-label="Обрати товари"
-                            (click)="openDialog($event, i)"
-                            class="icon-big"
-                          >
-                            <mat-icon>manage_search</mat-icon>
-                          </a>
-                        </mat-form-field>
-                      </mat-grid-tile>
-                      <mat-grid-tile colspan="2"
-                        ><mat-form-field>
-                          <input
-                            matInput
-                            formControlName="quantity"
-                            placeholder="Кількість"
-                            type="number"
-                            min="1"
-                            style="width: 50px"
-                            (change)="calculateTotalPrice()" /></mat-form-field
-                      ></mat-grid-tile>
-                      <mat-grid-tile colspan="2"
-                        ><mat-form-field>
-                          <input
-                            matInput
-                            formControlName="article"
-                            placeholder="Артикул"
-                            readonly /></mat-form-field
-                      ></mat-grid-tile>
-                      <mat-grid-tile colspan="1"
-                        ><mat-form-field>
-                          <input
-                            matInput
-                            formControlName="size"
-                            placeholder="Розмір"
-                            readonly /></mat-form-field
-                      ></mat-grid-tile>
-                      <mat-grid-tile colspan="2"
-                        ><mat-form-field>
-                          <input
-                            matInput
-                            type="number"
-                            min="0"
-                            formControlName="cost"
-                            placeholder="Ціна"
-                            (change)="calculateTotalPrice()" /></mat-form-field
-                      ></mat-grid-tile>
-                      <mat-grid-tile colspan="2">
-                        <a
-                          mat-raised-button
-                          class="delete"
-                          (click)="deleteProduct(i)"
-                          ><mat-icon> delete</mat-icon></a
-                        >
-                      </mat-grid-tile>
-                    </div>
-                  </ng-container>
-                </ng-container>
-              </div>
-              <mat-grid-tile colspan="8"
-                ><a mat-mini-fab (click)="addProduct()">
-                  <mat-icon>add</mat-icon>
-                </a></mat-grid-tile
-              >
-              <mat-grid-tile colspan="2"
-                >Загальна вартість:
-                {{ totalPrice | currency: "₴" }}</mat-grid-tile
-              >
-              <mat-grid-tile colspan="2"></mat-grid-tile>
-            </mat-grid-list>
-          </div>
-        </mat-expansion-panel>
-      </mat-accordion>
-
-      <!-- <pre>{{ form.value | json }}</pre> -->
-
-      <div class="buttons">
+    <ng-container [ngSwitch]="listLevel">
+      <mat-form-field
+        [style.font-size]="'14px'"
+        [style.width]="'calc(100% - 30px)'"
+        [style.margin]="'5px 15px 0 15px'"
+      >
+        <mat-label>Пошук</mat-label>
+        <input
+          matInput
+          type="search"
+          [(ngModel)]="searchText"
+          (input)="search()"
+        />
         <button
-          mat-raised-button
-          type="submit"
-          [disabled]="form.invalid || form.disabled"
-          class="save"
+          *ngIf="searchText"
+          matSuffix
+          mat-icon-button
+          aria-label="Очистити"
+          (click)="searchText = ''; search()"
         >
-          Зберегти
+          <mat-icon>close</mat-icon>
         </button>
-        <a
-          *ngIf="!isNew"
-          [disabled]="form.disabled"
-          mat-raised-button
-          class="delete"
-          (click)="delete()"
+      </mat-form-field>
+      <mat-list *ngSwitchCase="0">
+        <mat-list-item
+          *ngFor="let category of categories"
+          (click)="selectCategory(category)"
         >
-          <mat-icon>delete</mat-icon>
-        </a>
-      </div>
-    </form>
-  </mat-card-content>
-</mat-card>
+          <span>{{ category.name }}</span>
+        </mat-list-item>
+      </mat-list>
+      <mat-list *ngSwitchDefault>
+        <button mat-button (click)="listLevel = 0" *ngIf="searchText == ''">
+          <mat-icon>chevron_left</mat-icon>
+          Назад
+        </button>
+        <mat-list-item
+          *ngFor="let product of displayedContent"
+          (click)="selectProduct(product)"
+        >
+          <div class="product-item">
+            <div class="product-header">
+              <span class="product-name">{{ product.name }}</span>
+              <span class="product-icon">
+                <mat-icon>
+                  {{
+                    isSelected(product)
+                      ? "check_box"
+                      : "check_box_outline_blank"
+                  }}
+                </mat-icon>
+              </span>
+            </div>
+            <span class="product-article" *ngIf="product.article">
+              АРТ {{ product.article }}</span
+            >
+            <span class="product-price">{{
+              product.price | currency: "₴"
+            }}</span>
+          </div>
+        </mat-list-item>
+      </mat-list>
+    </ng-container>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <mat-card>
+      <mat-card-content>
+        <form [formGroup]="form" (ngSubmit)="onSubmit()" class="accordionForm">
+          <mat-accordion multi>
+            <mat-expansion-panel expanded>
+              <mat-expansion-panel-header>
+                <mat-panel-title> Основна інформація </mat-panel-title>
+                <mat-panel-description> </mat-panel-description>
+              </mat-expansion-panel-header>
+
+              <mat-form-field appearance="fill">
+                <mat-label>Номер</mat-label>
+                <input matInput formControlName="number" readonly />
+              </mat-form-field>
+              <mat-form-field appearance="fill">
+                <mat-label>Дата</mat-label>
+                <input matInput formControlName="date" readonly />
+              </mat-form-field>
+              <mat-form-field>
+                <mat-label>Постачальник</mat-label>
+                <mat-select formControlName="provider">
+                  <mat-option *ngFor="let item of providers" [value]="item._id">
+                    {{ item.name }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </mat-expansion-panel>
+
+            <mat-expansion-panel
+              [disabled]="productList.value.length === 0"
+              [expanded]="productList.value.length !== 0"
+            >
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  Товари
+                  <span>&nbsp;— {{ productList.value.length }} </span>
+                  <span>&nbsp;— {{ totalPrice | currency: "₴" }} </span>
+                  <a
+                    mat-icon-button
+                    (click)="$event.stopPropagation(); drawerProducts.toggle()"
+                    *ngIf="hideSidenav && !drawerProducts.opened"
+                  >
+                    <mat-icon>search</mat-icon>
+                  </a>
+                </mat-panel-title>
+                <mat-panel-description></mat-panel-description>
+              </mat-expansion-panel-header>
+              <div class="table-wrapper">
+                <table
+                  mat-table
+                  [dataSource]="productListDataSource"
+                  formArrayName="list"
+                  [style.width]="'100%'"
+                >
+                  <ng-container matColumnDef="name">
+                    <th mat-header-cell *matHeaderCellDef>Назва товару</th>
+                    <td mat-cell *matCellDef="let item">
+                      {{ getProductName(item.product) }}
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="quantity">
+                    <th mat-header-cell *matHeaderCellDef>Кількість</th>
+                    <td
+                      mat-cell
+                      *matCellDef="let item; let index = index"
+                      [formGroupName]="index"
+                    >
+                      <mat-form-field [style.max-width]="'40px'">
+                        <input
+                          matInput
+                          type="number"
+                          formControlName="quantity"
+                        />
+                      </mat-form-field>
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="price">
+                    <th mat-header-cell *matHeaderCellDef>Ціна</th>
+                    <td
+                      mat-cell
+                      *matCellDef="let item; let index = index"
+                      [formGroupName]="index"
+                    >
+                      <mat-form-field [style.max-width]="'60px'">
+                        <input matInput type="number" formControlName="cost" />
+                      </mat-form-field>
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="total">
+                    <th mat-header-cell *matHeaderCellDef>Сума</th>
+                    <td mat-cell *matCellDef="let item; let index = index">
+                      {{
+                        productList.at(index).value.cost *
+                          productList.at(index).value.quantity | currency: "₴"
+                      }}
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="actions">
+                    <th mat-header-cell *matHeaderCellDef></th>
+                    <td mat-cell *matCellDef="let product">
+                      <a mat-icon-button (click)="removeProduct(product)">
+                        <mat-icon>delete</mat-icon>
+                      </a>
+                    </td>
+                  </ng-container>
+                  <tr
+                    mat-header-row
+                    *matHeaderRowDef="displayedColumns; sticky: true"
+                  ></tr>
+                  <tr
+                    mat-row
+                    *matRowDef="let row; columns: displayedColumns"
+                  ></tr>
+                </table>
+
+                <div class="total-price">
+                  <span>Сума:</span>
+                  <span>{{ totalPrice | currency: "₴" }}</span>
+                </div>
+              </div>
+            </mat-expansion-panel>
+          </mat-accordion>
+
+          <!-- <pre>{{ form.value | json }}</pre> -->
+
+          <div class="buttons">
+            <button
+              mat-raised-button
+              type="submit"
+              [disabled]="form.invalid || form.disabled"
+              class="save"
+            >
+              Зберегти
+            </button>
+            <a
+              *ngIf="!isNew"
+              [disabled]="form.disabled"
+              mat-raised-button
+              class="delete"
+              (click)="delete()"
+            >
+              <mat-icon>delete</mat-icon>
+            </a>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </mat-sidenav-content>
+</mat-sidenav-container>
