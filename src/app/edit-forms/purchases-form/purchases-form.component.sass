@@ -16,15 +16,39 @@ form
     .delete
       margin-left: 20px
 
-mat-grid-list
-  min-width: 520px
+mat-list-item
+  cursor: pointer
+  transition: all 150ms ease-in
 
-  mat-grid-tile
-    width: min-content
+  &:hover
+    background: #f5f5f5
 
-    mat-form-field
-      width: 100%
+  .product-item
+    display: flex
+    flex-direction: column
+    width: 100%
 
-      .icon-big
-        font-size: 20px
+    .product-header
+      display: flex
+      flex-wrap: nowrap
+      justify-content: space-between
 
+      .product-name
+        font-size: small
+        white-space: nowrap
+        text-overflow: ellipsis
+        overflow: hidden
+        width: 180px
+
+      .product-icon
+        height: 15px
+        
+        mat-icon
+          font-size: 20px
+
+    .product-article
+      font-size: x-small
+      color: #757575
+
+    .product-price
+      font-size: small
